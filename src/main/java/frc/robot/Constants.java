@@ -13,6 +13,8 @@ public class Constants {
         // Ultrasonic constants
         public static final int LOAD_LENGTH = 10; // # of cycles to be considered loaded
         public static final double LOAD_DISTANCE = 40; // mm away from sensor to be considered loaded
+
+        // Vision constants
     }
 
     public static final class DriveConstants {
@@ -28,6 +30,7 @@ public class Constants {
         // Chassis configuration
         public static final double kTrackWidth = Units.inchesToMeters(26.5);
         // Distance between centers of right and left wheels on robot
+
         public static final double kWheelBase = Units.inchesToMeters(26.5);
         // Distance between front and back wheels on robot
         public static final SwerveDriveKinematics kDriveKinematics =
@@ -44,15 +47,15 @@ public class Constants {
         public static final double kBackRightChassisAngularOffset = Math.PI / 2;
     
         // SPARK MAX CAN IDs
-        public static final int kFrontLeftDrivingCanId = 6;
-        public static final int kRearLeftDrivingCanId = 15;
-        public static final int kFrontRightDrivingCanId = 13;
-        public static final int kRearRightDrivingCanId = 11;
+        public static final int kFrontLeftDrivingCanId = 7;
+        public static final int kRearLeftDrivingCanId = 5;
+        public static final int kFrontRightDrivingCanId = 1;
+        public static final int kRearRightDrivingCanId = 3;
     
-        public static final int kFrontLeftTurningCanId = 16;
-        public static final int kRearLeftTurningCanId = 14;
-        public static final int kFrontRightTurningCanId = 12;
-        public static final int kRearRightTurningCanId = 10;
+        public static final int kFrontLeftTurningCanId = 8;
+        public static final int kRearLeftTurningCanId = 6;
+        public static final int kFrontRightTurningCanId = 2;
+        public static final int kRearRightTurningCanId = 4;
     
         public static final boolean kGyroReversed = false;
         public static final int kTeleDriveMaxAngularSpeedRadiansPerSecond = 0;
@@ -122,6 +125,7 @@ public class Constants {
         public static final int kDriverControllerPort = 0;
         public static final double kDriveDeadband = 0.05;
         public static final double kDeadband = 0;
+        public static final int SUPPLEMENTAL_CONTROLLER_PORT = 1;
       }
     
       public static final class AutoConstants {
@@ -143,6 +147,31 @@ public class Constants {
       public static final class NeoMotorConstants {
         public static final double kFreeSpeedRpm = 5676;
       }
+
+      public static final class AssemblyConstants {
+        public static final int ASSEMBLY_MOTOR_ID = 13;
+        public static final double ASSEMBLY_MAX_SPEED = 0.3;
+      }
+
+      public static final class IntakeConstants {
+        public static final int INTAKE_MOTOR_ID = 9;
+      }
+
+
+      public static final class SlideConstants {
+        public static final int SLIDE_MOTOR_ID = 12;
+        public static final double SLIDE_MAX_SPEED = 0.3;
+      }
+
+      public static final class BeltConstants {
+        public static final int BELT_MOTOR_ID = 10;
+      }
+
+      public static final class FlyWheelConstants {
+        public static final int FW_MOTOR_ID = 11;
+      }
+
+      
     
     public static int currentMode;
 }
