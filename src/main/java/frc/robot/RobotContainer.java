@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.IntakeCom2;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.AssemblySubsystem;
 import frc.robot.subsystems.BeltSubsystem;
@@ -86,9 +88,11 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    new JoystickButton(supplementalController, XboxController.Button.kY.value)
-      .whileTrue(new RunCommand(IntakeCommand(intakeSS, INTAKE_MAX_SPEED)));
+   // new JoystickButton(supplementalController, XboxController.Button.kY.value)
+   //   .whileTrue(new RunCommand(IntakeCommand(intakeSS, IntakeConstants.INTAKE_MAX_SPEED)));
     
+   new JoystickButton(supplementalController, XboxController.Button.kY.value)
+      .whileTrue(new IntakeCom2(intakeSubsystem)); 
   }
 
   /**
