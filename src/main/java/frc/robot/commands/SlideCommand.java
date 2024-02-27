@@ -8,13 +8,13 @@ import frc.robot.subsystems.SlideSubsystem;
 
 public class SlideCommand extends Command{
 
-    private final SlideSubsystem slideSubsystem;
+    private final SlideSubsystem slideSS;
     private final double speed;
 
-    public SlideCommand(SlideSubsystem slideSubsystem, double speed) {
-        this.slideSubsystem = slideSubsystem;
+    public SlideCommand(SlideSubsystem slideSS, double speed) {
+        this.slideSS = slideSS;
         this.speed = speed;
-        addRequirements(slideSubsystem);
+        addRequirements(slideSS);
     }
 
     @Override
@@ -24,12 +24,12 @@ public class SlideCommand extends Command{
 
     @Override
     public void execute() {
-        slideSubsystem.setSpeed(speed);
+        slideSS.setSpeed(speed);
     }
 
     @Override
     public void end(boolean interrupted) {
-        slideSubsystem.setSpeed(0);
+        slideSS.setSpeed(0);
     }
 
     @Override

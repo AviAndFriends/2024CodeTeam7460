@@ -8,13 +8,13 @@ import frc.robot.subsystems.AssemblySubsystem;
 
 public class AssemblyCommand extends Command {
     
-    private final AssemblySubsystem assemblySubsystem;
+    private final AssemblySubsystem assemblySS;
     private final double speed;
 
-    public AssemblyCommand(AssemblySubsystem assemblySubsystem, double speed) {
-        this.assemblySubsystem = assemblySubsystem;
+    public AssemblyCommand(AssemblySubsystem assemblySS, double speed) {
+        this.assemblySS = assemblySS;
         this.speed = speed;
-        addRequirements(assemblySubsystem);
+        addRequirements(assemblySS);
     }
 
     @Override
@@ -24,12 +24,12 @@ public class AssemblyCommand extends Command {
 
     @Override
     public void execute() {
-        assemblySubsystem.setSpeed(speed);
+        assemblySS.setSpeed(speed);
     }
 
     @Override
     public void end(boolean interrupted) {
-        assemblySubsystem.setSpeed(0);
+        assemblySS.setSpeed(0);
     }
 
     @Override

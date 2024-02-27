@@ -155,6 +155,7 @@ public class Constants {
 
       public static final class IntakeConstants {
         public static final int INTAKE_MOTOR_ID = 9;
+        public static final double INTAKE_MAX_SPEED = 0.7;
       }
 
 

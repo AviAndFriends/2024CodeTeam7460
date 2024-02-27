@@ -49,7 +49,7 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  CommandXboxController supplementalController = new CommandXboxController(OIConstants.SUPPLEMENTAL_CONTROLLER_PORT);
+  XboxController supplementalController = new XboxController(OIConstants.SUPPLEMENTAL_CONTROLLER_PORT);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -86,7 +86,8 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    //supplementalController.a().whileTrue();
+    new JoystickButton(supplementalController, XboxController.Button.kY.value)
+      .whileTrue(new RunCommand(IntakeCommand(intakeSS, INTAKE_MAX_SPEED)));
     
   }
 
