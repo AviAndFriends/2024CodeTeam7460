@@ -13,7 +13,7 @@ public class FlyWheelSubsystem extends SubsystemBase {
     private final CANSparkMax fw_motor = new CANSparkMax(FlyWheelConstants.FW_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
     
     public FlyWheelSubsystem() {
-
+        fw_motor.restoreFactoryDefaults();
     }
 
     @Override

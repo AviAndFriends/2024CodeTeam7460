@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -26,8 +27,14 @@ public class Robot extends LoggedRobot {
 
   private RobotContainer m_robotContainer;
 
-  Ultrasonic m_rangeFinder = new Ultrasonic(1, 2);
-  double[] uSonicValueHistory = new double[SensorConstants.LOAD_LENGTH];
+  /*
+   private final TrapezoidProfile ASSEMBLY_MOTOR_ID = 
+    new TrapezoidProfile(new TrapezoidProfile.Constraints(maxVelocity:0.6, kMaxAccelerationMetersPerSecondSquared:0.3 ));
+    private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
+    private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();    
+   */
+
+  
 
   @Override
   public void robotInit() {
@@ -51,9 +58,7 @@ public class Robot extends LoggedRobot {
 
     m_robotContainer = new RobotContainer();
 
-    Shuffleboard.getTab("Sensors").add(m_rangeFinder); // should this be here? idk
-
-    m_rangeFinder.setAutomaticMode(true);
+    
   }
 
   @Override
@@ -99,7 +104,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopPeriodic() {
-    Logger.recordOutput("Ring loaded", isLoaded());
+    
   }
 
   @Override
@@ -119,42 +124,5 @@ public class Robot extends LoggedRobot {
   public void testExit() {
   }
 
-  public boolean isLoaded() {
-    if (m_rangeFinder.isRangeValid()) {
-      // We can read the distance in millimeters
-      double distanceMillimeters = m_rangeFinder.getRangeMM();
-      // ... or in inches
-      double distanceInches = m_rangeFinder.getRangeInches();
-
-      Logger.recordOutput("Ultrasonic Distance[mm]", distanceMillimeters);
-
-      // We can also publish the data itself periodically
-      SmartDashboard.putNumber("Distance[mm]", distanceMillimeters);
-      SmartDashboard.putNumber("Distance[inch]", distanceInches);
-
-      
-      for(int i = 0; i < SensorConstants.LOAD_LENGTH - 1; i++) {
-        uSonicValueHistory[i] = uSonicValueHistory[i + 1];
-      }
-
-      uSonicValueHistory[SensorConstants.LOAD_LENGTH - 1] = distanceMillimeters;
-
-      String histString = "";
-      for(double element : uSonicValueHistory) {
-        histString += String.valueOf(element) + " | ";
-      }
-
-      System.out.println(histString);
-
-      for(double element : uSonicValueHistory) {
-        if(element > SensorConstants.LOAD_DISTANCE) {
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    return false;
-  }
+  
 }

@@ -15,6 +15,7 @@ public class Constants {
         public static final double LOAD_DISTANCE = 40; // mm away from sensor to be considered loaded
 
         // Vision constants
+        public static final String CAMERA_NAME = "photonvision";
     }
 
     public static final class DriveConstants {
@@ -47,15 +48,15 @@ public class Constants {
         public static final double kBackRightChassisAngularOffset = Math.PI / 2;
     
         // SPARK MAX CAN IDs
-        public static final int kFrontLeftDrivingCanId = 7;
-        public static final int kRearLeftDrivingCanId = 5;
-        public static final int kFrontRightDrivingCanId = 1;
-        public static final int kRearRightDrivingCanId = 3;
+        public static final int kFrontLeftDrivingCanId = 3;
+        public static final int kRearLeftDrivingCanId = 1;
+        public static final int kFrontRightDrivingCanId = 5;
+        public static final int kRearRightDrivingCanId = 7;
     
-        public static final int kFrontLeftTurningCanId = 8;
-        public static final int kRearLeftTurningCanId = 6;
-        public static final int kFrontRightTurningCanId = 2;
-        public static final int kRearRightTurningCanId = 4;
+        public static final int kFrontLeftTurningCanId = 4;
+        public static final int kRearLeftTurningCanId = 2;
+        public static final int kFrontRightTurningCanId = 6;
+        public static final int kRearRightTurningCanId = 8;
     
         public static final boolean kGyroReversed = false;
         public static final int kTeleDriveMaxAngularSpeedRadiansPerSecond = 0;
@@ -151,10 +152,13 @@ public class Constants {
       public static final class AssemblyConstants {
         public static final int ASSEMBLY_MOTOR_ID = 13;
         public static final double ASSEMBLY_MAX_SPEED = 0.3;
+        //public static final double ASSEMBLY_SHOOTING_ANGLE = 
+        //Add SmartMotion PID Constants Code from RevRobotics
       }
 
       public static final class IntakeConstants {
         public static final int INTAKE_MOTOR_ID = 9;
+        public static final double INTAKE_MAX_SPEED = -0.5;
       }
 
 
@@ -165,17 +169,15 @@ public class Constants {
 
       public static final class BeltConstants {
         public static final int BELT_MOTOR_ID = 10;
+        public static final double BELT_MAX_SPEED = 0.3;
       }
 
       public static final class FlyWheelConstants {
         public static final int FW_MOTOR_ID = 11;
+        public static final double FW_MAX_SPEED = -0.5;
       }
 
       
     
     public static int currentMode;
 }
-
-this is the new change for testing
-testing for merge editor for dhaval :)
-more text for filler!

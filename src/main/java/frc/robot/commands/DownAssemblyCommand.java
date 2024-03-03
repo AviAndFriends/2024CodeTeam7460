@@ -6,11 +6,11 @@ import frc.robot.Constants.AssemblyConstants;
 import frc.robot.subsystems.AssemblySubsystem;
 
 
-public class AssemblyCommand extends Command {
+public class DownAssemblyCommand extends Command {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final AssemblySubsystem assemblySubsystem;
 
-    public AssemblyCommand(AssemblySubsystem asubsystem) {
+    public DownAssemblyCommand(AssemblySubsystem asubsystem) {
         assemblySubsystem = asubsystem;
         addRequirements(assemblySubsystem);
     }
@@ -20,7 +20,7 @@ public class AssemblyCommand extends Command {
 
     @Override
     public void execute(){
-        assemblySubsystem.setSpeed(AssemblyConstants.ASSEMBLY_MAX_SPEED);
+        assemblySubsystem.setSpeed(-0.3);
     }
 
 

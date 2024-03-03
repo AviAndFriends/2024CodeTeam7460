@@ -15,23 +15,39 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AssemblyCommand;
+import frc.robot.commands.BeltCommand;
+import frc.robot.commands.DownAssemblyCommand;
+import frc.robot.commands.DownBeltCommand;
+import frc.robot.commands.DownSlideCommand;
+import frc.robot.commands.FlyWheelCommand;
+import frc.robot.commands.GroundLoadCommand;
+import frc.robot.commands.IntakeCom3;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.SlideCommand;
 import frc.robot.subsystems.AssemblySubsystem;
 import frc.robot.subsystems.BeltSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.FlyWheelSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.SlideSubsystem;
+import frc.robot.subsystems.UltrasonicSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.List;
+
+import javax.swing.plaf.basic.BasicBorders.ToggleButtonBorder;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -46,10 +62,12 @@ public class RobotContainer {
   private final BeltSubsystem beltSubsystem = new BeltSubsystem();
   private final FlyWheelSubsystem flyWheelSubsystem = new FlyWheelSubsystem();
   private final AssemblySubsystem assemblySubsystem = new AssemblySubsystem();
+  private final SlideSubsystem slideSubsystem = new SlideSubsystem();
+  private final UltrasonicSubsystem ultrasonicSubsystem = new UltrasonicSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  CommandXboxController supplementalController = new CommandXboxController(OIConstants.SUPPLEMENTAL_CONTROLLER_PORT);
+  XboxController supplementalController = new XboxController(OIConstants.SUPPLEMENTAL_CONTROLLER_PORT);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -59,7 +77,9 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configure default commands
-    m_robotDrive.setDefaultCommand(
+
+  
+   m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
@@ -68,7 +88,9 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
-            m_robotDrive));
+            m_robotDrive)); 
+  
+
   }
 
   /**
@@ -86,9 +108,38 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    //supplementalController.a().whileTrue();
+
+    new JoystickButton(supplementalController, XboxController.Button.kA.value)
+    .toggleOnTrue(new GroundLoadCommand(beltSubsystem, intakeSubsystem, ultrasonicSubsystem));
+    
+    
+    
+    new JoystickButton(supplementalController,XboxController.Button.kB.value)
+    .toggleOnTrue(new FlyWheelCommand(flyWheelSubsystem));
+    
+
+    new JoystickButton(supplementalController, XboxController.Button.kX.value)
+    .whileTrue(new AssemblyCommand(assemblySubsystem));
+
+    new JoystickButton(supplementalController, XboxController.Button.kY.value)
+    .whileTrue(new SlideCommand(slideSubsystem));
+    
+
+    //new JoystickButton(supplementalController, XboxController.Button.kB.value)
+    //.whileTrue(new DownAssemblyCommand(assemblySubsystem));
+
+    
+
+    
+    new POVButton(supplementalController, 0)
+    .whileTrue(new AssemblyCommand(assemblySubsystem));
+
+    
+    //new JoystickButton(supplementalController, XboxController.Button.kB.value)
+    //.whileTrue(new FlyWheelCommand(flyWheelSubsystem));
     
   }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

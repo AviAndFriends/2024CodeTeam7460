@@ -14,6 +14,7 @@ public class BeltSubsystem extends SubsystemBase {
     private final CANSparkMax b_motor = new CANSparkMax(BeltConstants.BELT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
     
     public BeltSubsystem() {
+        b_motor.restoreFactoryDefaults();
     }
 
     @Override
