@@ -158,7 +158,11 @@ public class Constants {
 
       public static final class IntakeConstants {
         public static final int INTAKE_MOTOR_ID = 9;
+<<<<<<< HEAD
         public static final double INTAKE_MAX_SPEED = -0.5;
+=======
+        public static final double INTAKE_MAX_SPEED = 0.7;
+>>>>>>> 871ffe4fac66ff29b1b72c08cfffe7cde5e453d6
       }
 
 
@@ -180,4 +184,9 @@ public class Constants {
       
     
     public static int currentMode;
+<<<<<<< HEAD
 }
+=======
+}
+
+>>>>>>> 871ffe4fac66ff29b1b72c08cfffe7cde5e453d6

@@ -7,13 +7,17 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeCommand extends Command {
     
-    private final IntakeSubsystem intakeSubsystem;
+    private final IntakeSubsystem intakeSS;
     private final double speed;
 
-    public IntakeCommand(IntakeSubsystem intakeSubsystem, double speed) {
-        this.intakeSubsystem = intakeSubsystem;
+    public IntakeCommand(IntakeSubsystem intakeSS, double speed) {
+        this.intakeSS = intakeSS;
         this.speed = speed;
+<<<<<<< HEAD
         addRequirements(this.intakeSubsystem);
+=======
+        addRequirements(intakeSS);
+>>>>>>> 871ffe4fac66ff29b1b72c08cfffe7cde5e453d6
     }
 
     @Override
@@ -23,12 +27,12 @@ public class IntakeCommand extends Command {
 
     @Override
     public void execute() {
-        intakeSubsystem.setSpeed(speed);
+        intakeSS.setSpeed(speed);
     }
 
     @Override
     public void end(boolean interrupted) {
-        intakeSubsystem.setSpeed(0);
+        intakeSS.setSpeed(0);
     }
 
     @Override

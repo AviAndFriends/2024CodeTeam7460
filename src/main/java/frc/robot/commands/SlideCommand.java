@@ -9,12 +9,22 @@ import frc.robot.subsystems.SlideSubsystem;
 
 public class SlideCommand extends Command{
 
+<<<<<<< HEAD
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final SlideSubsystem slideSubsystem;
 
     public SlideCommand(SlideSubsystem ssubsystem) {
         slideSubsystem = ssubsystem;
         addRequirements(slideSubsystem);
+=======
+    private final SlideSubsystem slideSS;
+    private final double speed;
+
+    public SlideCommand(SlideSubsystem slideSS, double speed) {
+        this.slideSS = slideSS;
+        this.speed = speed;
+        addRequirements(slideSS);
+>>>>>>> 871ffe4fac66ff29b1b72c08cfffe7cde5e453d6
     }
 
     @Override 
@@ -26,11 +36,23 @@ public class SlideCommand extends Command{
         
     }
 
+<<<<<<< HEAD
 
         @Override
         public void end(boolean interrupted){
             slideSubsystem.setSpeed(0);
         }
+=======
+    @Override
+    public void execute() {
+        slideSS.setSpeed(speed);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        slideSS.setSpeed(0);
+    }
+>>>>>>> 871ffe4fac66ff29b1b72c08cfffe7cde5e453d6
 
         
 @Override

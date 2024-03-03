@@ -13,6 +13,9 @@ public class SupplementalControllerCommands extends Command {
 
   @Override
   public void execute() {
+    new JoystickButton(s_controller, Button.kX.value)
+    .whileTrue(new HalveDriveSpeed(m_robotDrive));
+
     // Shooter is
     // Intake is
     // Assembly is
