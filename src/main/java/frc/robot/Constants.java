@@ -11,8 +11,8 @@ public class Constants {
         // Constants for sensors (ie. ultrasonic sensor)
 
         // Ultrasonic constants
-        public static final int LOAD_LENGTH = 10; // # of cycles to be considered loaded
-        public static final double LOAD_DISTANCE = 40; // mm away from sensor to be considered loaded
+        public static final int LOAD_LENGTH = 1; // # of cycles to be considered loaded
+        public static final double LOAD_DISTANCE = 76.2; // mm away from sensor to be considered loaded
 
         // Vision constants
         public static final String CAMERA_NAME = "photonvision";
@@ -158,11 +158,7 @@ public class Constants {
 
       public static final class IntakeConstants {
         public static final int INTAKE_MOTOR_ID = 9;
-<<<<<<< HEAD
-        public static final double INTAKE_MAX_SPEED = -0.5;
-=======
-        public static final double INTAKE_MAX_SPEED = 0.7;
->>>>>>> 871ffe4fac66ff29b1b72c08cfffe7cde5e453d6
+        public static final double INTAKE_MAX_SPEED = -0.4;
       }
 
 
@@ -173,20 +169,13 @@ public class Constants {
 
       public static final class BeltConstants {
         public static final int BELT_MOTOR_ID = 10;
-        public static final double BELT_MAX_SPEED = 0.3;
+        public static final double BELT_MAX_SPEED = 0.4;
       }
 
       public static final class FlyWheelConstants {
         public static final int FW_MOTOR_ID = 11;
-        public static final double FW_MAX_SPEED = -0.5;
+        public static final double FW_MAX_SPEED = -0.6;
       }
-
       
-    
     public static int currentMode;
-<<<<<<< HEAD
 }
-=======
-}
-
->>>>>>> 871ffe4fac66ff29b1b72c08cfffe7cde5e453d6

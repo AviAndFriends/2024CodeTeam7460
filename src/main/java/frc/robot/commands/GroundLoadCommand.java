@@ -31,7 +31,9 @@ public class GroundLoadCommand extends Command{
     public void execute(){
             beltSubsystem.setSpeed(BeltConstants.BELT_MAX_SPEED);
             intakeSubsystem.setSpeed(IntakeConstants.INTAKE_MAX_SPEED); 
-        
+        if(ultrasonicSubsystem.loaded) {
+            end(false);
+        }
     }
 
 

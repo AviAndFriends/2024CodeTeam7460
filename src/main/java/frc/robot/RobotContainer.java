@@ -20,7 +20,6 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
-<<<<<<< HEAD
 import frc.robot.commands.AssemblyCommand;
 import frc.robot.commands.BeltCommand;
 import frc.robot.commands.DownAssemblyCommand;
@@ -29,10 +28,6 @@ import frc.robot.commands.DownSlideCommand;
 import frc.robot.commands.FlyWheelCommand;
 import frc.robot.commands.GroundLoadCommand;
 import frc.robot.commands.IntakeCom3;
-=======
-import frc.robot.commands.IntakeCom2;
->>>>>>> 871ffe4fac66ff29b1b72c08cfffe7cde5e453d6
-import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.SlideCommand;
 import frc.robot.subsystems.AssemblySubsystem;
 import frc.robot.subsystems.BeltSubsystem;
@@ -113,7 +108,6 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-<<<<<<< HEAD
 
     new JoystickButton(supplementalController, XboxController.Button.kA.value)
     .toggleOnTrue(new GroundLoadCommand(beltSubsystem, intakeSubsystem, ultrasonicSubsystem));
@@ -123,12 +117,17 @@ public class RobotContainer {
     new JoystickButton(supplementalController,XboxController.Button.kB.value)
     .toggleOnTrue(new FlyWheelCommand(flyWheelSubsystem));
     
+    //new JoystickButton(supplementalController, XboxController.Button.kX.value)
+    //.whileTrue(new BeltCommand(beltSubsystem));
+
+    //new JoystickButton(supplementalController, XboxController.Button.kX.value)
+    //.whileTrue(new AssemblyCommand(assemblySubsystem));
 
     new JoystickButton(supplementalController, XboxController.Button.kX.value)
-    .whileTrue(new AssemblyCommand(assemblySubsystem));
+    .whileTrue(new SlideCommand(slideSubsystem));
 
     new JoystickButton(supplementalController, XboxController.Button.kY.value)
-    .whileTrue(new SlideCommand(slideSubsystem));
+    .whileTrue(new DownSlideCommand(slideSubsystem));
     
 
     //new JoystickButton(supplementalController, XboxController.Button.kB.value)
@@ -143,13 +142,9 @@ public class RobotContainer {
     
     //new JoystickButton(supplementalController, XboxController.Button.kB.value)
     //.whileTrue(new FlyWheelCommand(flyWheelSubsystem));
-=======
-   // new JoystickButton(supplementalController, XboxController.Button.kY.value)
-   //   .whileTrue(new RunCommand(IntakeCommand(intakeSS, IntakeConstants.INTAKE_MAX_SPEED)));
->>>>>>> 871ffe4fac66ff29b1b72c08cfffe7cde5e453d6
     
-   new JoystickButton(supplementalController, XboxController.Button.kY.value)
-      .whileTrue(new IntakeCom2(intakeSubsystem)); 
+   //new JoystickButton(supplementalController, XboxController.Button.kY.value)
+     // .whileTrue(new IntakeCom3(intakeSubsystem)); 
   }
 
 

@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-<<<<<<< HEAD
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.BeltConstants;
 import frc.robot.subsystems.BeltSubsystem;
@@ -33,42 +32,4 @@ public class BeltCommand extends Command {
 public boolean isFinished() {
     return false;
 }
-=======
-import java.security.PublicKey;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.BeltSubsystem;
-
-
-public class BeltCommand extends Command {
-    
-    private final BeltSubsystem beltSS;
-    private final double speed;
-
-    public BeltCommand(BeltSubsystem beltSS, double speed) {
-        this.beltSS = beltSS;
-        this.speed = speed;
-        addRequirements(beltSS);
-    }
-
-    @Override
-    public void initialize() {
-
-    }
-
-    @Override
-    public void execute() {
-        beltSS.setSpeed(speed);
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        beltSS.setSpeed(0);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
->>>>>>> 871ffe4fac66ff29b1b72c08cfffe7cde5e453d6
 }

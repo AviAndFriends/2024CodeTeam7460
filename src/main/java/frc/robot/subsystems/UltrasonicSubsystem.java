@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SensorConstants;
 
 public class UltrasonicSubsystem extends SubsystemBase{
-    Ultrasonic m_rangeFinder = new Ultrasonic(1, 2);
+    Ultrasonic m_rangeFinder = new Ultrasonic(2, 1);
     double[] uSonicValueHistory = new double[SensorConstants.LOAD_LENGTH];
     public boolean loaded;
     
@@ -22,6 +22,7 @@ public class UltrasonicSubsystem extends SubsystemBase{
     public void periodic() {
         loaded = isLoaded();
         Logger.recordOutput("Ring loaded", loaded);
+        Logger.recordOutput("Ultrasonic Distance", m_rangeFinder.getRangeMM());
 
     }
 
