@@ -11,8 +11,8 @@ public class Constants {
         // Constants for sensors (ie. ultrasonic sensor)
 
         // Ultrasonic constants
-        public static final int LOAD_LENGTH = 1; // # of cycles to be considered loaded
-        public static final double LOAD_DISTANCE = 76.2; // mm away from sensor to be considered loaded
+        public static final int LOAD_LENGTH = 3; // # of cycles to be considered loaded
+        public static final double LOAD_DISTANCE = 70; // mm away from sensor to be considered loaded
 
         // Vision constants
         public static final String CAMERA_NAME = "photonvision";
@@ -23,7 +23,7 @@ public class Constants {
         // the robot, rather the allowed maximum speeds
         public static final double kMaxSpeedMetersPerSecond = 4.8;
         public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
-        public static final double xSpeed = 0; //change max speed
+        public static final double xSpeed = 2.4; //change max speed
         public static final double kDirectionSlewRate = 1.2; // radians per second
         public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
         public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
@@ -137,7 +137,7 @@ public class Constants {
     
         public static final double kPXController = 1;
         public static final double kPYController = 1;
-        public static final double kPThetaController = 1;
+        public static final double kPThetaController = 3;
     
         // Constraint for the motion profiled robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
@@ -151,30 +151,38 @@ public class Constants {
 
       public static final class AssemblyConstants {
         public static final int ASSEMBLY_MOTOR_ID = 13;
-        public static final double ASSEMBLY_MAX_SPEED = 0.3;
-        //public static final double ASSEMBLY_SHOOTING_ANGLE = 
+        //originally at 0.3
+        public static final double ASSEMBLY_MAX_SPEED = 0.2;
+        public static final double ASSEMBLY_SHOOTING_ANGLE = 6.2; //changed from 5.7
+        public static final double ASSEMBLY_INTAKE_ANGLE = 0.2;
         //Add SmartMotion PID Constants Code from RevRobotics
+        public static final double ASSEMBLY_AMP_SHOOT = 32.9;
       }
-
+//
       public static final class IntakeConstants {
         public static final int INTAKE_MOTOR_ID = 9;
-        public static final double INTAKE_MAX_SPEED = -0.4;
+        public static final double INTAKE_MAX_SPEED = -0.3;
       }
 
 
       public static final class SlideConstants {
         public static final int SLIDE_MOTOR_ID = 12;
-        public static final double SLIDE_MAX_SPEED = 0.3;
+        //originally at 0.8
+        public static final double SLIDE_MAX_SPEED = .9;
+        public static final double SLIDE_LOW = 0;
+        public static final double SLIDE_HIGH = 5;
+        public static final double SLIDE_AMP_SHOOT = 9.5;  
       }
 
       public static final class BeltConstants {
         public static final int BELT_MOTOR_ID = 10;
-        public static final double BELT_MAX_SPEED = 0.4;
+        public static final double BELT_MAX_SPEED = 0.9;
+        public static final double BELT_BACKUP_OFFEST = -0.25;
       }
 
       public static final class FlyWheelConstants {
         public static final int FW_MOTOR_ID = 11;
-        public static final double FW_MAX_SPEED = -0.6;
+        public static final double FW_MAX_SPEED = -0.8;
       }
       
     public static int currentMode;
