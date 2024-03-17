@@ -73,6 +73,10 @@ public class AssemblySubsystem extends SubsystemBase {
         a_pidController.setReference(AssemblyConstants.ASSEMBLY_INTAKE_ANGLE, CANSparkMax.ControlType.kPosition); 
     }
 
+    public void autonomousPosition() {
+        a_pidController.setReference(AssemblyConstants.ASSEMBLY_AUTONOMOUS1_SHOOTING_ANGLE, CANSparkMax.ControlType.kPosition);
+    }
+
     public void ampShoot(){
         a_pidController.setReference(AssemblyConstants.ASSEMBLY_AMP_SHOOT, CANSparkMax.ControlType.kPosition);     
     }

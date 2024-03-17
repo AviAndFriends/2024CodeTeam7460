@@ -52,7 +52,7 @@ public class UltrasonicSubsystem extends SubsystemBase{
         histString += String.valueOf(element) + " | ";
       }
 
-      System.out.println(histString);
+      // System.out.println(histString);
 
       for(double element : uSonicValueHistory) {
         if(element > SensorConstants.LOAD_DISTANCE) {
