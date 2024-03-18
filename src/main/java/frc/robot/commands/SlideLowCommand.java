@@ -9,12 +9,12 @@ import frc.robot.Constants.SlideConstants;
 public class SlideLowCommand extends Command{
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final SlideSubsystem slideSubsystem;
-    // private final AssemblySubsystem assemblySubsystem;
+    private final AssemblySubsystem assemblySubsystem;
 
-    public SlideLowCommand(SlideSubsystem sSubsystem) {
+    public SlideLowCommand(SlideSubsystem sSubsystem, AssemblySubsystem aSubsystem) {
         slideSubsystem = sSubsystem;
-        //assemblySubsystem = aSubsystem;
-        addRequirements(slideSubsystem);
+        assemblySubsystem = aSubsystem;
+        addRequirements(slideSubsystem, assemblySubsystem);
 }
 
 @Override 
@@ -23,7 +23,7 @@ public class SlideLowCommand extends Command{
     @Override
     public void execute(){
 
-   //assemblySubsystem.intakePosition();
+     assemblySubsystem.intakePosition();
     slideSubsystem.lowPosition();
    
 

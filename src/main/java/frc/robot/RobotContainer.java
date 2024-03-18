@@ -12,6 +12,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -21,11 +22,12 @@ import frc.robot.commands.AssemblyIntakeCommand;
 import frc.robot.commands.AssemblyShootingCommand;
 import frc.robot.commands.BeltCommand;
 import frc.robot.commands.DownAssemblyCommand;
-import frc.robot.commands.DownBeltCommand;
-import frc.robot.commands.DownSlideCommand;
-import frc.robot.commands.FlyWheelCommand;
 import frc.robot.commands.GroundLoadCommand;
 import frc.robot.commands.IntakeCom3;
+import frc.robot.commands.AmpReadyCommand;
+import frc.robot.commands.ReadyToShootCommand;
+import frc.robot.commands.ReverseBeltCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.commands.AmpReadyCommand;
 import frc.robot.commands.ReadyToShootCommand;
 import frc.robot.commands.ReverseBeltCommand;
@@ -39,13 +41,18 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.FlyWheelSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SlideSubsystem;
+import frc.robot.commands.DownBeltCommand;
 import frc.robot.subsystems.UltrasonicSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -79,11 +86,14 @@ public class RobotContainer {
 
     // Configure default commands
 
+
    m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
+                -MathUtil.applyDeadband(-m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(-m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(-m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(-m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
@@ -104,8 +114,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /*new JoystickButton(m_driverController, Button.kR1.value)
+    /*new JoystickButton(m_driverController, Button.kR1.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
+            m_robotDrive));*/
+
             m_robotDrive));*/
 
 
@@ -143,8 +156,52 @@ public class RobotContainer {
     .whileTrue(new ReverseBeltCommand(beltSubsystem));
 
     new JoystickButton(m_driverController, XboxController.Button.kB.value)
+    new JoystickButton(supplementalController, XboxController.Button.kY.value)
+    .toggleOnTrue(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem));
+    
+    new JoystickButton(supplementalController, XboxController.Button.kB.value)
+    .toggleOnTrue(new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem));
+
+    
+    //new JoystickButton(supplementalController,XboxController.Button.kX.value)
+    //.whileTrue(new ShootCommand(beltSubsystem, flyWheelSubsystem, assemblySubsystem));
+    
+    new JoystickButton(m_driverController,XboxController.Button.kRightBumper.value)
+    .whileTrue (new BeltCommand (beltSubsystem));
+
+
+    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+    .whileTrue(new DownAssemblyCommand(assemblySubsystem));
+
+    //new JoystickButton(supplementalController,XboxController.Button.kX.value)
+    //.whileTrue(new AssemblyShootingCommand(assemblySubsystem));
+
+    //new JoystickButton(supplementalController, XboxController.Button.kY.value)
+    //.whileTrue(new AssemblyIntakeCommand(assemblySubsystem));
+
+
+    new POVButton(supplementalController, 0)
     .whileTrue(new AssemblyCommand(assemblySubsystem));
 
+    new JoystickButton(supplementalController, XboxController.Button.kRightBumper.value)
+    .whileTrue(new IntakeCom3(intakeSubsystem));
+   
+    new JoystickButton(supplementalController, XboxController.Button.kLeftBumper.value)
+    .whileTrue(new ReverseBeltCommand(beltSubsystem));
+
+    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+    .whileTrue(new AssemblyCommand(assemblySubsystem));
+
+    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+    .whileTrue(new SlideHighCommand(slideSubsystem));
+
+
+
+    
+    //new JoystickButton(m_driverController, XboxController.Button.kA.value)
+    //.whileTrue(new SlideHighCommand(slideSubsystem));
+
+    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
     new JoystickButton(m_driverController, XboxController.Button.kA.value)
     .whileTrue(new SlideHighCommand(slideSubsystem));
 
@@ -210,6 +267,7 @@ public class RobotContainer {
     // .whileTrue(new BeltCommand(beltSubsystem));
     //new JoystickButton(supplementalController, XboxController.Button.kB.value)
     //.whileTrue(new FlyWheelCommand(flyWheelSubsystem));
+    //.whileTrue(new FlyWheelCommand(flyWheelSubsystem));
     
    //new JoystickButton(supplementalController, XboxController.Button.kY.value)
      // .whileTrue(new IntakeCom3(intakeSubsystem)); 
@@ -222,7 +280,20 @@ public class RobotContainer {
  
     
 
+   //new JoystickButton(supplementalController, XboxController.Button.kY.value)
+     // .whileTrue(new IntakeCom3(intakeSubsystem)); 
+
+  //new JoystickButton(supplementalController, XboxController.Button.kX.value)
+    //.whileTrue(new AssemblyCommand(assemblySubsystem));
+
+  
+
+ 
+    
+
     //new JoystickButton(supplementalController, XboxController.Button.kB.value)
+    //.whileTrue(new DownAssemblyCommand(assemblySubsystem));
+
     //.whileTrue(new DownAssemblyCommand(assemblySubsystem));
 
   }
@@ -246,7 +317,9 @@ public class RobotContainer {
         // Start at the origin facing the +X direction
         new Pose2d(0, 0, new Rotation2d(0)),
         List.of(new Translation2d(1.5, 0)),
+        List.of(new Translation2d(1.5, 0)),
         // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(3, 0, new Rotation2d(Units.degreesToRadians(-80))),
         new Pose2d(3, 0, new Rotation2d(Units.degreesToRadians(-80))),
         config);
 
@@ -270,6 +343,12 @@ public class RobotContainer {
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
+    return new SequentialCommandGroup( 
+      swerveControllerCommand,
+      new ParallelDeadlineGroup(new WaitCommand(4), new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem)),
+      new ParallelDeadlineGroup(new WaitCommand(2), new ShootCommand(beltSubsystem, flyWheelSubsystem, assemblySubsystem))
+    );
+    
     return new SequentialCommandGroup( 
       swerveControllerCommand,
       new ParallelDeadlineGroup(new WaitCommand(4), new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem)),
