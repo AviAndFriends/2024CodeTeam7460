@@ -58,6 +58,7 @@ public class SlideSubsystem extends SubsystemBase{
        Logger.recordOutput("Slide Encoder Position", s_encoder.getPosition());
     }
 
+    
     public void setSpeed(double speed) {
         s_motor.set(speed * SlideConstants.SLIDE_MAX_SPEED);
     }

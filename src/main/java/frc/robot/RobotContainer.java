@@ -20,10 +20,12 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AssemblyCommand;
 import frc.robot.commands.AssemblyIntakeCommand;
 import frc.robot.commands.AssemblyShootingCommand;
+import frc.robot.commands.Autonomous1ReadyToShoot;
 import frc.robot.commands.BeltCommand;
 import frc.robot.commands.DownAssemblyCommand;
 import frc.robot.commands.GroundLoadCommand;
 import frc.robot.commands.IntakeCom3;
+import frc.robot.commands.AlignCommand;
 import frc.robot.commands.AmpReadyCommand;
 import frc.robot.commands.ReadyToShootCommand;
 import frc.robot.commands.ReverseBeltCommand;
@@ -41,9 +43,11 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SlideSubsystem;
 import frc.robot.commands.DownBeltCommand;
 import frc.robot.subsystems.UltrasonicSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -60,6 +64,8 @@ import com.pathplanner.lib.auto.NamedCommands;
  * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
  * (including subsystems, commands, and button mappings) should be declared here.
  */
+
+// import org.photonvision.simulation.VisionSystemSim;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
@@ -69,6 +75,7 @@ public class RobotContainer {
   private final AssemblySubsystem assemblySubsystem = new AssemblySubsystem();
   private final SlideSubsystem slideSubsystem = new SlideSubsystem();
   private final UltrasonicSubsystem ultrasonicSubsystem = new UltrasonicSubsystem();
+  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -108,15 +115,19 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    /*new JoystickButton(m_driverController, Button.kR1.value)
+    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
-            m_robotDrive));*/
+            m_robotDrive));
 
 
-    new JoystickButton(supplementalController, XboxController.Button.kY.value)
-    .toggleOnTrue(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem));
+    // new JoystickButton(supplementalController, XboxController.Button.kY.value)
+    // .toggleOnTrue(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem));
     
+    new JoystickButton(supplementalController, XboxController.Button.kY.value)
+    .onTrue(new AlignCommand(m_robotDrive, visionSubsystem));
+    
+
     new JoystickButton(supplementalController, XboxController.Button.kB.value)
     .toggleOnTrue(new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem));
 
@@ -258,63 +269,48 @@ public class RobotContainer {
     //     // Add kinematics to ensure max speed is actually obeyed
     //     .setKinematics(DriveConstants.kDriveKinematics);
 
-    // // An example trajectory to follow. All units in meters.
-    // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-    //     // Start at the origin facing the +X direction
-    //     new Pose2d(0, 0, new Rotation2d(0)),
-    //     List.of(new Translation2d(1.5, 0)),
-    //     // End 3 meters straight ahead of where we started, facing forward
-    //     new Pose2d(3, 0, new Rotation2d(Units.degreesToRadians(-80))),
-    //     config);
+    // An example trajectory to follow. All units in meters.
+    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(
+          new Translation2d(1, 0),
+          new Translation2d(2, 0)
+        ),
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(3, 0,new Rotation2d(Units.degreesToRadians(-140))),
+        config);
 
-    // var thetaController = new ProfiledPIDController(
-    //     AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    // thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    // SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-    //     exampleTrajectory,
-    //     m_robotDrive::getPose, // Functional interface to feed supplier
-    //     DriveConstants.kDriveKinematics,
-
-    //     // Position controllers
-    //     new PIDController(AutoConstants.kPXController, 0, 0),
-    //     new PIDController(AutoConstants.kPYController, 0, 0),
-    //     thetaController,
-    //     m_robotDrive::setModuleStates,
-    //     m_robotDrive);
-
-    // // Reset odometry to the starting pose of the trajectory.
-    // m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // // Run path following command, then stop at the end.
-    // return new SequentialCommandGroup( 
-    //   swerveControllerCommand,
-    //   new ParallelDeadlineGroup(new WaitCommand(4), new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem)),
-    //   new ParallelDeadlineGroup(new WaitCommand(2), new ShootCommand(beltSubsystem, flyWheelSubsystem, assemblySubsystem))
-    // );
-    
+        var thetaController = new ProfiledPIDController(
+          AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+      thetaController.enableContinuousInput(-Math.PI, Math.PI);
+ 
+      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+          exampleTrajectory,
+          m_robotDrive::getPose, // Functional interface to feed supplier
+          DriveConstants.kDriveKinematics,
+ 
+          // Position controllers
+          
+          new PIDController(AutoConstants.kPXController, 0, 0),
+          new PIDController(AutoConstants.kPYController, 0, 0),
+          thetaController,
+          m_robotDrive::setModuleStates,
+          m_robotDrive);
+ 
+  
+      // Reset odometry to the starting pose of the trajectory.
+      m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+      // Run path following command, then stop at the end.
+      return new SequentialCommandGroup( 
+        new SequentialCommandGroup(
+          swerveControllerCommand,
+          new Autonomous1ReadyToShoot(flyWheelSubsystem, assemblySubsystem),
+          new ParallelDeadlineGroup(
+            new WaitCommand(3), 
+            new RunCommand(m_robotDrive::setX)
+        ),
+        new ShootCommand(beltSubsystem, flyWheelSubsystem, assemblySubsystem))
+      );
   }
 }
-
-
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-/* 
-package frc.robot;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-
-public class RobotContainer {
-  public RobotContainer() {
-    configureBindings();
-  }
-
-  private void configureBindings() {}
-
-  public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
-  }
-}
-*/
