@@ -1,62 +1,65 @@
 package frc.robot.commands;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AssemblySubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.SlideSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.Constants.AssemblyConstants;
-import frc.robot.Constants.SlideConstants;
 
 public class AlignCommand extends Command {
 
-    @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
     private final DriveSubsystem driveSubsystem;
     private final VisionSubsystem visionSubsystem;
-
-    boolean finished;
-
+    private boolean done;
+    
 
     public AlignCommand(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem) {
         this.driveSubsystem = driveSubsystem;
         this.visionSubsystem = visionSubsystem;
-        finished = false;
-        addRequirements(driveSubsystem);
+        addRequirements(this.driveSubsystem);
     }
 
     @Override
     public void initialize() {
+        done = false;
     }
 
     @Override
     public void execute() {
         // if(visionSubsystem.getXPosition(7) < 1) {
-        //     driveSubsystem.drive(-0.3, 0, 0, false, false);
+        // driveSubsystem.drive(-0.3, 0, 0, false, false);
         // } else if(visionSubsystem.getXPosition(7) > 1.1) {
-        //     driveSubsystem.drive(0.3, 0, 0, false, false);
+        // driveSubsystem.drive(0.3, 0, 0, false, false);
         // } else {
-        //     driveSubsystem.drive(0, 0, 0, false, false);
+        // driveSubsystem.drive(0, 0, 0, false, false);
         // }
-        double yPos = visionSubsystem.getYPosition(7);
-        if(yPos > 0.05 && yPos != 10000) {
-            driveSubsystem.drive(0, 0, 0.1, false, false);
-        } else if(yPos < -0.05 && yPos != 10000) {
-            driveSubsystem.drive(0, 0, -0.1, false, false);
-        } else  {
-            finished = true;
+        double yPos = 10000;
+        if(visionSubsystem.getYPosition(7) != 10000) {
+            yPos = visionSubsystem.getYPosition(7);
+        } else if(visionSubsystem.getYPosition(4) != 10000) {
+            yPos = visionSubsystem.getYPosition(4);
         }
+        
 
-        
-        
-    } 
+        if (yPos > 0.1 && yPos != 10000) {
+            driveSubsystem.drive(0, 0, 0.2, false, false);
+        } else if (yPos < -0.1 && yPos != 10000) {
+            driveSubsystem.drive(0, 0, -0.2, false, false);
+        } else {
+            System.out.println(yPos);
+            done = true;
+        }
+    }
 
     @Override
     public void end(boolean interrupted) {
         driveSubsystem.drive(0, 0, 0, false, false);
     }
 
+
+
     @Override
     public boolean isFinished() {
-        return finished;
+        return done;
     }
 }

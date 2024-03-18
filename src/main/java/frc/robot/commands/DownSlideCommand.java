@@ -28,6 +28,7 @@ public class DownSlideCommand extends Command{
         @Override
         public void end(boolean interrupted){
             slideSubsystem.setSpeed(0);
+            slideSubsystem.lowPosition();
         }
 
         

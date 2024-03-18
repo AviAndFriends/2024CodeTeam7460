@@ -127,6 +127,7 @@ public class Constants {
         public static final double kDriveDeadband = 0.05;
         public static final double kDeadband = 0;
         public static final int SUPPLEMENTAL_CONTROLLER_PORT = 1;
+        public static final int BUTTON_BOX_PORT = 2;
       }
     
       public static final class AutoConstants {
@@ -170,7 +171,7 @@ public class Constants {
         public static final int SLIDE_MOTOR_ID = 12;
         //originally at 0.8
         public static final double SLIDE_MAX_SPEED = .9;
-        public static final double SLIDE_LOW = 0;
+        public static final double SLIDE_LOW = 0.1;
         public static final double SLIDE_HIGH = 5;
         public static final double SLIDE_AMP_SHOOT = 9.5;  
       }
