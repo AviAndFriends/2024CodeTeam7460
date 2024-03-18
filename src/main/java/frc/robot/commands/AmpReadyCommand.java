@@ -3,8 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AssemblySubsystem;
 import frc.robot.subsystems.SlideSubsystem;
-import frc.robot.Constants.AssemblyConstants;
-import frc.robot.Constants.SlideConstants;
 
 
 public class AmpReadyCommand  extends Command{
