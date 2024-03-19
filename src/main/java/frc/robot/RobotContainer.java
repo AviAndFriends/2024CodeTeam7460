@@ -14,6 +14,8 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -60,11 +62,16 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import java.util.List;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 public class RobotContainer {
+  private final SendableChooser<Command> autoChooser;
+
     // The robot's subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
@@ -74,13 +81,13 @@ public class RobotContainer {
     private final SlideSubsystem slideSubsystem = new SlideSubsystem();
     private final UltrasonicSubsystem ultrasonicSubsystem = new UltrasonicSubsystem();
     private final VisionSubsystem visionSubsystem = new VisionSubsystem();
-    private final RealAutonomousCommand realAutonomousCommand = new RealAutonomousCommand(beltSubsystem, flyWheelSubsystem, assemblySubsystem);
-
+    
     // The driver's controller
     XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
     XboxController supplementalController = new XboxController(OIConstants.SUPPLEMENTAL_CONTROLLER_PORT);
     XboxController buttonBox = new XboxController(OIConstants.BUTTON_BOX_PORT);
 
+    
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -89,6 +96,8 @@ public class RobotContainer {
         configureButtonBindings();
 
         // Configure default commands
+        autoChooser = AutoBuilder.buildAutoChooser();
+        //Shuffleboard.putData("Auto Chooser", autoChooser);
 
         m_robotDrive.setDefaultCommand(
                 // The left stick controls translation of the robot.
@@ -102,7 +111,13 @@ public class RobotContainer {
                         m_robotDrive));
 
         NamedCommands.registerCommand("FlyWheel", new FlyWheelCommand(flyWheelSubsystem));
-    }
+        NamedCommands.registerCommand("GroundLoad",new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem));
+        NamedCommands.registerCommand("AssemblyShooting", new AssemblyShootingCommand(assemblySubsystem));
+        NamedCommands.registerCommand("Belt", new BeltCommand(beltSubsystem));
+        NamedCommands.registerCommand("DownBeltCommand", new DownBeltCommand(beltSubsystem));
+        NamedCommands.registerCommand("ReadytoShoot", new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem));
+
+}
 
     /**
      * Use this method to define your button->command mappings. Buttons can be
@@ -238,7 +253,6 @@ public class RobotContainer {
     // }
 
     public Command getAutonomousCommand() {
-        Command autoCommand;
-        return autoCommand;
+        return new PathPlannerAuto("LeftShootAuto");
     }
 }

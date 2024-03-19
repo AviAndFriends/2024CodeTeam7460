@@ -23,6 +23,22 @@
         "x": 2.9256625179917033,
         "y": 7.069116360454943
       },
+      "nextControl": {
+        "x": 3.2107075325261767,
+        "y": 7.354161374989417
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.242062484124969,
+        "y": 7.2857505715011435
+      },
+      "prevControl": {
+        "x": 3.2263850083255727,
+        "y": 7.31995597324528
+      },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
@@ -30,7 +46,42 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ReadyToShoot",
+      "waypointRelativePos": 2.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ReadytoShoot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Belt",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Belt"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
