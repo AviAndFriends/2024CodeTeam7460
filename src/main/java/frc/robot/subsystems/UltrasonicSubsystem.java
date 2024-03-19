@@ -36,10 +36,7 @@ public class UltrasonicSubsystem extends SubsystemBase{
 
       Logger.recordOutput("Ultrasonic Distance[mm]", distanceMillimeters);
 
-      // We can also publish the data itself periodically
-      SmartDashboard.putNumber("Distance[mm]", distanceMillimeters);
-      SmartDashboard.putNumber("Distance[inch]", distanceInches);
-
+    
       
       for(int i = 0; i < SensorConstants.LOAD_LENGTH - 1; i++) {
         uSonicValueHistory[i] = uSonicValueHistory[i + 1];

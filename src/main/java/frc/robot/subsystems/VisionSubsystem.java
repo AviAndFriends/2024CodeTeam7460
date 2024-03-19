@@ -9,7 +9,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -34,8 +34,18 @@ public class VisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Logger.recordOutput("XPos from April Tag", getXPosition(7));
-        Logger.recordOutput("YPos fom april tag", getYPosition(7));
+        if(getYPosition(7) != 10000) {
+            SmartDashboard.putBoolean("Tag 7 Visible", true);
+        } else {
+            SmartDashboard.putBoolean("Tag 7 Visible", false);
+        }
+
+
+        if(getYPosition(4) != 10000) {
+            SmartDashboard.putBoolean("Tag 4 Visible", true);
+        } else {
+            SmartDashboard.putBoolean("Tag 4 Visible", false);
+        }
     }
 
     public double getXPosition(int targetID) {

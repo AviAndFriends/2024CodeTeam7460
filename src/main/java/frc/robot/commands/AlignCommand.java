@@ -33,20 +33,21 @@ public class AlignCommand extends Command {
         // } else {
         // driveSubsystem.drive(0, 0, 0, false, false);
         // }
-        double yPos = 10000;
+     double yPos;
         if(visionSubsystem.getYPosition(7) != 10000) {
             yPos = visionSubsystem.getYPosition(7);
         } else if(visionSubsystem.getYPosition(4) != 10000) {
             yPos = visionSubsystem.getYPosition(4);
+        } else {
+            yPos = 10000;
         }
         
 
-        if (yPos > 0.1 && yPos != 10000) {
+        if (yPos > -0.12 && yPos != 10000) {
             driveSubsystem.drive(0, 0, 0.2, false, false);
-        } else if (yPos < -0.1 && yPos != 10000) {
+        } else if (yPos < -0.28 && yPos != 10000) {
             driveSubsystem.drive(0, 0, -0.2, false, false);
         } else {
-            System.out.println(yPos);
             done = true;
         }
     }

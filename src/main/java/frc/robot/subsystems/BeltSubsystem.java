@@ -38,7 +38,7 @@ public class BeltSubsystem extends SubsystemBase {
 
     initTime = Timer.getFPGATimestamp();
     while (Timer.getFPGATimestamp()- initTime <= b_backup){
-        System.out.println(Timer.getFPGATimestamp()-initTime);
+        // System.out.println(Timer.getFPGATimestamp()-initTime);
         b_motor.set(-speed);
     }
     b_motor.set(0);

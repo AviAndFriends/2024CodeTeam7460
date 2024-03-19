@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import frc.robot.Constants.AutoConstants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -52,8 +53,11 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
-  private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+
+  public final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+
+
+  public SwerveAutoBuilder autoBuilder;
 
 
   // Slew rate filter variables for controlling lateral acceleration
@@ -109,6 +113,7 @@ public class DriveSubsystem extends SubsystemBase {
             },
             this // Reference to this subsystem to set requirements
     );
+
   }
 
   @Override
@@ -321,3 +326,5 @@ public class DriveSubsystem extends SubsystemBase {
   //   throw new UnsupportedOperationException("Unimplemented method 'createTrajectoryFollowingCommand'");
   // }
 }
+
+
