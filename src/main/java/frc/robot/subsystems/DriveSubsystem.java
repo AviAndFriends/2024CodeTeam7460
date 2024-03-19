@@ -4,23 +4,21 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.WPIUtilJNI;
-// import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-// import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import frc.utils.swerveUtils;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SerialPort.Port; // put number 
-import edu.wpi.first.wpilibj.SerialPort;
-import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort.Port;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SerialPort;
 import com.kauailabs.navx.frc.AHRS.BoardYawAxis;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -57,6 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
   // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
+
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0;
   private double m_currentTranslationDir = 0.0;
@@ -79,7 +78,38 @@ public class DriveSubsystem extends SubsystemBase {
           });
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {}
+  public DriveSubsystem() {
+    configureAutoBuilder();
+  }
+
+  private void configureAutoBuilder() {
+    // Configure AutoBuilder here
+    AutoBuilder.configureHolonomic(
+            this::getPose, // Robot pose supplier
+            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+                    4.5, // Max module speed, in m/s
+                    0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                    new ReplanningConfig() // Default path replanning config. See the API for the options here
+            ),
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+    );
+  }
 
   @Override
   public void periodic() {
@@ -103,6 +133,18 @@ public class DriveSubsystem extends SubsystemBase {
     return m_odometry.getPoseMeters();
   }
 
+  // public void.resetPose(Pose2d initialStartingPose){
+  //   odometry.resetPosition(navX.getRotation2D()), getModulePositions(), initialStartingPose);
+  // }
+
+  // public ChassisSpeeds getSpeeds() {
+  //   return currentChassisSpeeds;
+  // }
+
+  // public void driveRobotRelative(ChassisSpeeds speeds){
+  //   drive(speeds);
+  // }
+
   /**
    * Resets the odometry to the specified pose.
    *
@@ -118,15 +160,20 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
         },
         pose);
+        
   }
-
   public ChassisSpeeds getSpeeds() {
-    ChassisSpeeds currentChassisSpeeds;
+    ChassisSpeeds currentChassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
     return currentChassisSpeeds;
-  }
+}
 
   public void driveRobotRelative(ChassisSpeeds speeds) {
     drive(speeds);
+  }
+
+  private void drive(ChassisSpeeds speeds) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'drive'");
   }
 
   /**
@@ -267,34 +314,10 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
-
-
-    // Configure AutoBuilder last
-    AutoBuilder.configureHolonomic(
-            this::getPose, // Robot pose supplier
-            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                    4.5, // Max module speed, in m/s
-                    0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-                    new ReplanningConfig() // Default path replanning config. See the API for the options here
-            ),
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            this // Reference to this subsystem to set requirements
-    );
   }
-}
+
+  // public var createTrajectoryFollowingCommand(Trajectory shoottestTrajectory) {
+  //   // TODO Auto-generated method stub
+  //   throw new UnsupportedOperationException("Unimplemented method 'createTrajectoryFollowingCommand'");
+  // }
 }
