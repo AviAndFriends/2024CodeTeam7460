@@ -2,6 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -56,190 +57,197 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import java.util.List;
-/*
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
- */
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
-// import org.photonvision.simulation.VisionSystemSim;
 public class RobotContainer {
-  // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  private final BeltSubsystem beltSubsystem = new BeltSubsystem();
-  private final FlyWheelSubsystem flyWheelSubsystem = new FlyWheelSubsystem();
-  private final AssemblySubsystem assemblySubsystem = new AssemblySubsystem();
-  private final SlideSubsystem slideSubsystem = new SlideSubsystem();
-  private final UltrasonicSubsystem ultrasonicSubsystem = new UltrasonicSubsystem();
-  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
-  private final RealAutonomousCommand realAutonomousCommand = new RealAutonomousCommand(beltSubsystem, flyWheelSubsystem, assemblySubsystem);
+  private final SendableChooser<Command> autoChooser;
 
-  // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController supplementalController = new XboxController(OIConstants.SUPPLEMENTAL_CONTROLLER_PORT);
-  XboxController buttonBox = new XboxController(OIConstants.BUTTON_BOX_PORT);
-
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
-  public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
-
-    // Configure default commands
-
-   m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(-m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(-m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true, true),
-            m_robotDrive)); 
-  
-
-  }
-
-  /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-   * subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-   * passing it to a
-   * {@link JoystickButton}.
-   */
-  private void configureButtonBindings() {
-    new JoystickButton(m_driverController, XboxController.Button.kA.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
-
-
-    // new JoystickButton(supplementalController, XboxController.Button.kY.value)
-    // .toggleOnTrue(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem));
+    // The robot's subsystems
+    private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+    private final BeltSubsystem beltSubsystem = new BeltSubsystem();
+    private final FlyWheelSubsystem flyWheelSubsystem = new FlyWheelSubsystem();
+    private final AssemblySubsystem assemblySubsystem = new AssemblySubsystem();
+    private final SlideSubsystem slideSubsystem = new SlideSubsystem();
+    private final UltrasonicSubsystem ultrasonicSubsystem = new UltrasonicSubsystem();
+    private final VisionSubsystem visionSubsystem = new VisionSubsystem();
     
-    
-    new JoystickButton(supplementalController, XboxController.Button.kY.value)
-    .onTrue(new AlignCommand(m_robotDrive, visionSubsystem));
-    
-
-    new JoystickButton(supplementalController, XboxController.Button.kB.value)
-    .toggleOnTrue(new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem));
+    // The driver's controller
+    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    XboxController supplementalController = new XboxController(OIConstants.SUPPLEMENTAL_CONTROLLER_PORT);
+    XboxController buttonBox = new XboxController(OIConstants.BUTTON_BOX_PORT);
 
     
-    //new JoystickButton(supplementalController,XboxController.Button.kX.value)
-    //.whileTrue(new ShootCommand(beltSubsystem, flyWheelSubsystem, assemblySubsystem));
-    
-    new JoystickButton(m_driverController,XboxController.Button.kA.value)
-    .whileTrue (new BeltCommand (beltSubsystem));
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        // Configure the button bindings
+        configureButtonBindings();
+
+        // Configure default commands
+        autoChooser = AutoBuilder.buildAutoChooser();
+        //Shuffleboard.putData("Auto Chooser", autoChooser);
+
+        m_robotDrive.setDefaultCommand(
+                // The left stick controls translation of the robot.
+                // Turning is controlled by the X axis of the right stick.
+                new RunCommand(
+                        () -> m_robotDrive.drive(
+                                -MathUtil.applyDeadband(-m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                                -MathUtil.applyDeadband(-m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                                true, true),
+                        m_robotDrive));
+
+        NamedCommands.registerCommand("FlyWheel", new FlyWheelCommand(flyWheelSubsystem));
+        NamedCommands.registerCommand("GroundLoad",new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem));
+        NamedCommands.registerCommand("AssemblyShooting", new AssemblyShootingCommand(assemblySubsystem));
+        NamedCommands.registerCommand("Belt", new BeltCommand(beltSubsystem));
+        NamedCommands.registerCommand("DownBeltCommand", new DownBeltCommand(beltSubsystem));
+        NamedCommands.registerCommand("ReadytoShoot", new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem));
+
+}
+
+    /**
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
+     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
+     * subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
+     * passing it to a
+     * {@link JoystickButton}.
+     */
+    private void configureButtonBindings() {
+        new JoystickButton(m_driverController, XboxController.Button.kA.value)
+                .whileTrue(new RunCommand(
+                        () -> m_robotDrive.setX(),
+                        m_robotDrive));
 
 
-    new JoystickButton(m_driverController, XboxController.Button.kB.value)
-    .whileTrue(new DownAssemblyCommand(assemblySubsystem));
-
-    //new JoystickButton(supplementalController,XboxController.Button.kX.value)
-    //.whileTrue(new AssemblyShootingCommand(assemblySubsystem));
-
-    //new JoystickButton(supplementalController, XboxController.Button.kY.value)
-    //.whileTrue(new AssemblyIntakeCommand(assemblySubsystem));
+        // new JoystickButton(supplementalController, XboxController.Button.kY.value)
+        // .toggleOnTrue(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem));
 
 
-    new POVButton(supplementalController, 0)
-    .whileTrue(new AssemblyCommand(assemblySubsystem));
-
-    new JoystickButton(supplementalController, XboxController.Button.kRightBumper.value)
-    .whileTrue(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem));
-   
-    new JoystickButton(supplementalController, XboxController.Button.kLeftBumper.value)
-    .whileTrue(new ReverseBeltCommand(beltSubsystem));
-
-   
-    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
-    .whileTrue(new SlideCommand(slideSubsystem));
-
-    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
-    .whileTrue(new DownSlideCommand(slideSubsystem));
-
-    new JoystickButton(m_driverController, XboxController.Button.kX.value)
-    .toggleOnTrue(new AmpReadyCommand(slideSubsystem, assemblySubsystem));
-
-    
-    new JoystickButton(buttonBox,1)
-    .whileTrue(new AssemblyCommand(assemblySubsystem));
-   
-    new JoystickButton(buttonBox,2)
-    .whileTrue(new DownAssemblyCommand(assemblySubsystem));
+        new JoystickButton(supplementalController, XboxController.Button.kY.value)
+                .onTrue(new AlignCommand(m_robotDrive, visionSubsystem));
 
 
-    new JoystickButton(buttonBox,3)
-    .toggleOnTrue(new AssemblyShootingCommand(assemblySubsystem));
+        new JoystickButton(supplementalController, XboxController.Button.kB.value)
+                .toggleOnTrue(new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem));
 
 
-    new JoystickButton(buttonBox,4)
-    .toggleOnTrue(new AssemblyIntakeCommand(assemblySubsystem));
-   
+        //new JoystickButton(supplementalController,XboxController.Button.kX.value)
+        //.whileTrue(new ShootCommand(beltSubsystem, flyWheelSubsystem, assemblySubsystem));
+
+        new JoystickButton(m_driverController, XboxController.Button.kA.value)
+                .whileTrue(new BeltCommand(beltSubsystem));
 
 
-   new JoystickButton(buttonBox, 5)
-   .whileTrue(new SlideCommand(slideSubsystem));
+        new JoystickButton(m_driverController, XboxController.Button.kB.value)
+                .whileTrue(new DownAssemblyCommand(assemblySubsystem));
+
+        //new JoystickButton(supplementalController,XboxController.Button.kX.value)
+        //.whileTrue(new AssemblyShootingCommand(assemblySubsystem));
+
+        //new JoystickButton(supplementalController, XboxController.Button.kY.value)
+        //.whileTrue(new AssemblyIntakeCommand(assemblySubsystem));
 
 
-   new JoystickButton(buttonBox, 6)
-   .whileTrue(new DownSlideCommand(slideSubsystem));
+        new POVButton(supplementalController, 0)
+                .whileTrue(new AssemblyCommand(assemblySubsystem));
+
+        new JoystickButton(supplementalController, XboxController.Button.kRightBumper.value)
+                .whileTrue(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem));
+
+        new JoystickButton(supplementalController, XboxController.Button.kLeftBumper.value)
+                .whileTrue(new ReverseBeltCommand(beltSubsystem));
 
 
-   new JoystickButton(buttonBox, 7)
-   .toggleOnTrue(new SlideLowCommand(slideSubsystem, assemblySubsystem));
+        new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+                .whileTrue(new SlideCommand(slideSubsystem));
+
+        new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
+                .whileTrue(new DownSlideCommand(slideSubsystem));
+
+        new JoystickButton(m_driverController, XboxController.Button.kX.value)
+                .toggleOnTrue(new AmpReadyCommand(slideSubsystem, assemblySubsystem));
 
 
-   new JoystickButton(buttonBox, 8)
-   .toggleOnTrue(new SlideHighCommand(slideSubsystem));
+        new JoystickButton(buttonBox, 1)
+                .whileTrue(new AssemblyCommand(assemblySubsystem));
+
+        new JoystickButton(buttonBox, 2)
+                .whileTrue(new DownAssemblyCommand(assemblySubsystem));
 
 
-  new JoystickButton(buttonBox, 9)
-  .whileTrue(new BeltCommand(beltSubsystem));
+        new JoystickButton(buttonBox, 3)
+                .toggleOnTrue(new AssemblyShootingCommand(assemblySubsystem));
 
 
-  new JoystickButton(buttonBox, 10)
-  .whileTrue(new DownBeltCommand(beltSubsystem));
+        new JoystickButton(buttonBox, 4)
+                .toggleOnTrue(new AssemblyIntakeCommand(assemblySubsystem));
 
 
-  new JoystickButton(buttonBox, 11)
-  .toggleOnTrue(new FlyWheelCommand(flyWheelSubsystem));
+        new JoystickButton(buttonBox, 5)
+                .whileTrue(new SlideCommand(slideSubsystem));
 
 
-  new JoystickButton(buttonBox, 12)
-  .toggleOnTrue(new IntakeCom3(intakeSubsystem));
-
-  
-
-  }
+        new JoystickButton(buttonBox, 6)
+                .whileTrue(new DownSlideCommand(slideSubsystem));
 
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    
-       return new SequentialCommandGroup(
-        //new AutoDriveCommand(),
-        //new WaitCommand(5),
-        //new RealAutonomousCommand(beltSubsystem, flyWheelSubsystem, assemblySubsystem)
-      );
+        new JoystickButton(buttonBox, 7)
+                .toggleOnTrue(new SlideLowCommand(slideSubsystem, assemblySubsystem));
 
-      
-          //new ParallelDeadlineGroup(
-            //new WaitCommand(3), 
-            //new RunCommand(m_robotDrive::setX)
-        //),
-        //new ShootCommand(beltSubsystem, flyWheelSubsystem, assemblySubsystem))
 
-  }
+        new JoystickButton(buttonBox, 8)
+                .toggleOnTrue(new SlideHighCommand(slideSubsystem));
+
+
+        new JoystickButton(buttonBox, 9)
+                .whileTrue(new BeltCommand(beltSubsystem));
+
+
+        new JoystickButton(buttonBox, 10)
+                .whileTrue(new DownBeltCommand(beltSubsystem));
+
+
+        new JoystickButton(buttonBox, 11)
+                .toggleOnTrue(new FlyWheelCommand(flyWheelSubsystem));
+
+
+        new JoystickButton(buttonBox, 12)
+                .toggleOnTrue(new IntakeCom3(intakeSubsystem));
+    }
+
+
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    // private final SequentialCommandGroup autoCommand;
+
+    // {
+    //     Trajectory shootTrajectory = AutoBuilder.deserializeFromFile("shoot.auto");
+    //     Trajectory shoottestTrajectory = AutoBuilder.deserializeFromFile("shoottest.auto");
+
+    //     var followShootPathCommand = m_robotDrive.createTrajectoryFollowingCommand(shootTrajectory);
+    //     var followShootTestPathCommand = m_robotDrive.createTrajectoryFollowingCommand(shoottestTrajectory);
+
+    //     autoCommand = new SequentialCommandGroup(
+    //         followShootPathCommand,
+    //         followShootTestPathCommand
+    //     );
+    // }
+
+    public Command getAutonomousCommand() {
+        return new PathPlannerAuto("LeftShootAuto");
+    }
 }
