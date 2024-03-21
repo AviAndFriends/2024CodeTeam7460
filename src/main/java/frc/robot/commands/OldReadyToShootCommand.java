@@ -6,34 +6,29 @@ import frc.robot.Constants.FlyWheelConstants;
 import frc.robot.subsystems.AssemblySubsystem;
 import frc.robot.subsystems.FlyWheelSubsystem;
 
-public class ReadyToShootCommand extends Command {
+public class OldReadyToShootCommand extends Command {
 
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
     private final FlyWheelSubsystem flyWheelSubsystem;
     private final AssemblySubsystem assemblySubsystem;
-    // private final int duration;
 
     boolean finished = false;
 
-    public ReadyToShootCommand(FlyWheelSubsystem fwsubsystem, AssemblySubsystem asubsystem) {
+    public OldReadyToShootCommand(FlyWheelSubsystem fwsubsystem, AssemblySubsystem asubsystem) {
         flyWheelSubsystem = fwsubsystem;
         assemblySubsystem = asubsystem;
         addRequirements(flyWheelSubsystem, assemblySubsystem);
-        // duration = -1;
     }
-
 
     @Override
     public void initialize() {
-        
     }
-
 
     @Override
     public void execute() {
         flyWheelSubsystem.setSpeed(FlyWheelConstants.FW_MAX_SPEED);
-        assemblySubsystem.newshootingPosition();
-        
+        assemblySubsystem.shootingPosition();
+        // finished = true;
     }
 
     @Override
@@ -45,8 +40,8 @@ public class ReadyToShootCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        
         return finished;
     }
 
 }
+
