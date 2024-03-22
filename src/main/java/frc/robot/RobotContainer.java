@@ -178,6 +178,13 @@ public class RobotContainer {
 
                 new JoystickButton(m_driverController, XboxController.Button.kX.value)
                                 .toggleOnTrue(new AmpReadyCommand(slideSubsystem, assemblySubsystem));
+                                
+               
+               new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+                  .whileTrue(new SlideCommand(slideSubsystem));
+
+               new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
+                  .whileTrue(new DownSlideCommand(slideSubsystem));
 
                 new JoystickButton(buttonBox, 1)
                                 .whileTrue(new AssemblyCommand(assemblySubsystem));
