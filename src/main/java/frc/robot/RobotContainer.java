@@ -149,30 +149,9 @@ public class RobotContainer {
                         () -> m_robotDrive.setX(),
                         m_robotDrive));
 
-
-
-
-        // new JoystickButton(supplementalController, XboxController.Button.kY.value)
-        // .toggleOnTrue(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem));
-
-
-<<<<<<< HEAD
-               //  new JoystickButton(m_driverController, XboxController.Button.kX.value)
-               //                  .toggleOnTrue(new AmpReadyCommand(slideSubsystem, assemblySubsystem));
-
-               new JoystickButton(m_driverController, XboxController.Button.kX.value)
-                                .onTrue(new SequentialCommandGroup(
-                                 
-                                    new AmpReadyCommand(slideSubsystem, assemblySubsystem),
-                                    new IntakeCom3(intakeSubsystem).withTimeout(3).alongWith(
-                                       new ReverseBeltCommand(beltSubsystem).withTimeout(3)),
-                                    new AssemblyIntakeCommand(assemblySubsystem),
-                                    new SlideLowCommand(slideSubsystem, assemblySubsystem)
-
-                                ));
-=======
->>>>>>> parent of 09995b9 (new auto)
-
+                // new JoystickButton(supplementalController, XboxController.Button.kY.value)
+                // .toggleOnTrue(new GroundLoadCommand(beltSubsystem, intakeSubsystem,
+                // assemblySubsystem, flyWheelSubsystem));
 
         new JoystickButton(supplementalController, XboxController.Button.kY.value)
                 .onTrue(new AlignCommand(m_robotDrive, visionSubsystem));
@@ -329,17 +308,16 @@ public class RobotContainer {
             m_robotDrive::getPose, // Functional interface to feed supplier
             DriveConstants.kDriveKinematics,
    
-            // Position controllers
-            new PIDController(AutoConstants.kPXController, 0, 0),
-            new PIDController(AutoConstants.kPYController, 0, 0),
-            thetaController,
-            m_robotDrive::setModuleStates,
-            m_robotDrive);
+        //     // Position controllers
+        //     new PIDController(AutoConstants.kPXController, 0, 0),
+        //     new PIDController(AutoConstants.kPYController, 0, 0),
+        //     thetaController,
+        //     m_robotDrive::setModuleStates,
+        //     m_robotDrive);
    
-        // Reset odometry to the starting pose of the trajectory.
-        m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+            
+
    
-<<<<<<< HEAD
         // Trajectory shootingtrajectory = TrajectoryGenerator.generateTrajectory(  
         //         // Start at the origin facing the +X direction
         // new Pose2d(0, 0, new Rotation2d(0)),
@@ -358,34 +336,28 @@ public class RobotContainer {
 
             // Run path following command, then stop at the end.
          return new SequentialCommandGroup(
-            new AutoReadyToShoot(flyWheelSubsystem, assemblySubsystem).withTimeout(3)
-            .alongWith(new SequentialCommandGroup(
-                 new WaitCommand(1.5),
-                 new BeltCommand(beltSubsystem).withTimeout(1)
-            )),
+           new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem).withTimeout(4)
+           .alongWith(new SequentialCommandGroup(
+                new WaitCommand(1),
+                new BeltCommand(beltSubsystem).withTimeout(2)
+           )),
            
-        //    new DriveUntilDistanceCommand(m_robotDrive, 1.5)
-        //     .alongWith(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem).withTimeout(1)),
+           new DriveUntilDistanceCommand(m_robotDrive, 2.2)
+
+        //    new DriveUntilDistanceCommand(m_robotDrive, 0.5, true, true)
+        //    .alongWith(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem).withTimeout(1)),
            
-             new DriveUntilDistanceCommand(m_robotDrive, 3, true, false)
-             //.alongWith(new ReverseBeltCommand(beltSubsystem).withTimeout(0.2)),
+        //    new DriveUntilDistanceCommand(m_robotDrive, 2.1, false, false)
+        //    .alongWith(new ),
 
-        //     new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem).withTimeout(4)
-        //     .alongWith(new SequentialCommandGroup(
-        //          new WaitCommand(1),
-        //          new BeltCommand(beltSubsystem).withTimeout(2)
-            //))
-
-        
+        //    new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem).withTimeout(4)
+        //    .alongWith(new SequentialCommandGroup(
+        //         new WaitCommand(1),
+        //         new BeltCommand(beltSubsystem).withTimeout(2)
+        //    ))
            );
 
         // );
-=======
-        // Run path following command, then stop at the end.
-        return new SequentialCommandGroup(
-          swerveControllerCommand
-        );
->>>>>>> parent of 09995b9 (new auto)
        
       }
     }
