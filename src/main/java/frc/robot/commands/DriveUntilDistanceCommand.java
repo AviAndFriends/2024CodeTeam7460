@@ -18,7 +18,7 @@ public class DriveUntilDistanceCommand extends Command {
         INITIAL_XPOSITION = driveSubsystem.getPose().getX();
 
         forward = true;
-        this.SPEED = 1;
+        this.SPEED = 0.5;
 
         addRequirements(this.driveSubsystem);
     }
@@ -29,7 +29,7 @@ public class DriveUntilDistanceCommand extends Command {
         INITIAL_XPOSITION = driveSubsystem.getPose().getX();
 
         this.forward = forward;
-        this.SPEED = 0.5;
+        this.SPEED = 0.2;
 
 
         addRequirements(this.driveSubsystem);
