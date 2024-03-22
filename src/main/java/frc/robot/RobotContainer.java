@@ -179,6 +179,12 @@ public class RobotContainer {
                 new JoystickButton(m_driverController, XboxController.Button.kX.value)
                                 .toggleOnTrue(new AmpReadyCommand(slideSubsystem, assemblySubsystem));
 
+               new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+                  .toggleOnTrue(new SlideCommand(slideSubsystem));
+
+               new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
+                  .toggleOnTrue(new DownSlideCommand(slideSubsystem));   
+
                 new JoystickButton(buttonBox, 1)
                                 .whileTrue(new AssemblyCommand(assemblySubsystem));
 
@@ -274,13 +280,14 @@ public class RobotContainer {
 
             // Run path following command, then stop at the end.
          return new SequentialCommandGroup(
-           new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem).withTimeout(4)
-           .alongWith(new SequentialCommandGroup(
-                new WaitCommand(1),
-                new BeltCommand(beltSubsystem).withTimeout(2)
-           )),
+         //   new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem).withTimeout(4)
+         //   .alongWith(new SequentialCommandGroup(
+         //        new WaitCommand(1),
+         //        new BeltCommand(beltSubsystem).withTimeout(2)
+         //   )),
+            new WaitCommand(11.5),
            
-           new DriveUntilDistanceCommand(m_robotDrive, 2.2)
+           new DriveUntilDistanceCommand(m_robotDrive, 2)
 
         //    new DriveUntilDistanceCommand(m_robotDrive, 0.5, true, true)
         //    .alongWith(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem).withTimeout(1)),
