@@ -176,8 +176,19 @@ public class RobotContainer {
                 new JoystickButton(supplementalController, XboxController.Button.kLeftBumper.value)
                                 .whileTrue(new ReverseBeltCommand(beltSubsystem));
 
-                new JoystickButton(m_driverController, XboxController.Button.kX.value)
-                                .toggleOnTrue(new AmpReadyCommand(slideSubsystem, assemblySubsystem));
+               //  new JoystickButton(m_driverController, XboxController.Button.kX.value)
+               //                  .toggleOnTrue(new AmpReadyCommand(slideSubsystem, assemblySubsystem));
+
+               new JoystickButton(m_driverController, XboxController.Button.kX.value)
+                                .onTrue(new SequentialCommandGroup(
+                                 
+                                    new AmpReadyCommand(slideSubsystem, assemblySubsystem),
+                                    new IntakeCom3(intakeSubsystem).withTimeout(3).alongWith(
+                                       new ReverseBeltCommand(beltSubsystem).withTimeout(3)),
+                                    new AssemblyIntakeCommand(assemblySubsystem),
+                                    new SlideLowCommand(slideSubsystem, assemblySubsystem)
+
+                                ));
 
                 new JoystickButton(buttonBox, 1)
                                 .whileTrue(new AssemblyCommand(assemblySubsystem));
@@ -280,19 +291,19 @@ public class RobotContainer {
                 new BeltCommand(beltSubsystem).withTimeout(2)
            )),
            
-           new DriveUntilDistanceCommand(m_robotDrive, 2.2)
+           new DriveUntilDistanceCommand(m_robotDrive, 2.2),
 
-        //    new DriveUntilDistanceCommand(m_robotDrive, 0.5, true, true)
-        //    .alongWith(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem).withTimeout(1)),
+            new DriveUntilDistanceCommand(m_robotDrive, 0.5, true, true)
+            .alongWith(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem).withTimeout(1)),
            
-        //    new DriveUntilDistanceCommand(m_robotDrive, 2.1, false, false)
-        //    .alongWith(new ),
+            new DriveUntilDistanceCommand(m_robotDrive, 2.1, false, false)
+            .alongWith(new ReverseBeltCommand(beltSubsystem).withTimeout(0.2)),
 
-        //    new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem).withTimeout(4)
-        //    .alongWith(new SequentialCommandGroup(
-        //         new WaitCommand(1),
-        //         new BeltCommand(beltSubsystem).withTimeout(2)
-        //    ))
+            new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem).withTimeout(4)
+            .alongWith(new SequentialCommandGroup(
+                 new WaitCommand(1),
+                 new BeltCommand(beltSubsystem).withTimeout(2)
+            ))
            );
 
         // );

@@ -28,15 +28,13 @@ public class AmpReadyCommand  extends Command{
         slideSubsystem.highPosition(); 
         assemblySubsystem.ampShoot();
             
-
+        
         
     }
 
     @Override
     public void end(boolean interrupted){
-            slideSubsystem.lowPosition();
-            assemblySubsystem.shootingPosition();
-     
+            // slideSubsystem.lowPosition();     
     }
   
 @Override
