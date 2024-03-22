@@ -158,7 +158,7 @@ public class Constants {
         public static final double ASSEMBLY_INTAKE_ANGLE = 0.2;
         //Add SmartMotion PID Constants Code from RevRobotics
         public static final double ASSEMBLY_AMP_SHOOT = 32.9;
-        public static final double ASSEMBLY_AUTONOMOUS1_SHOOTING_ANGLE = 5.9;
+        public static final double ASSEMBLY_AUTONOMOUS1_SHOOTING_ANGLE = 2.6;
       }
 //
       public static final class IntakeConstants {

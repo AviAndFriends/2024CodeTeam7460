@@ -20,7 +20,7 @@ public class FlyWheelSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         double rpm = fw_motor.getEncoder().getVelocity();
-        boolean ready = rpm > 100;
+        boolean ready = Math.abs(rpm) > 3200;
         Logger.recordOutput("Flywheel Motor Speed", fw_motor.get());
         SmartDashboard.putNumber("FlyWheel RPM", rpm);
         SmartDashboard.putBoolean("Shoot Ready", ready);
