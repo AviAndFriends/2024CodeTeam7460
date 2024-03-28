@@ -12,7 +12,6 @@ public class ReadyToShootCommand extends Command {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
     private final FlyWheelSubsystem flyWheelSubsystem;
     private final AssemblySubsystem assemblySubsystem;
-    // private final int duration;
 
     boolean finished = false;
 
@@ -20,21 +19,17 @@ public class ReadyToShootCommand extends Command {
         flyWheelSubsystem = fwsubsystem;
         assemblySubsystem = asubsystem;
         addRequirements(flyWheelSubsystem, assemblySubsystem);
-        // duration = -1;
     }
-
 
     @Override
     public void initialize() {
-        
     }
-
 
     @Override
     public void execute() {
         flyWheelSubsystem.setSpeed(FlyWheelConstants.FW_MAX_SPEED);
-        assemblySubsystem.newshootingPosition();
-        
+        assemblySubsystem.shootingPosition();
+        // finished = true;
     }
 
     @Override
@@ -46,7 +41,6 @@ public class ReadyToShootCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        
         return finished;
     }
 

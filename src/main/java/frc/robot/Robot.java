@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.LockSlide;
 
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
