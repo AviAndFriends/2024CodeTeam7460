@@ -62,6 +62,7 @@ public class GroundLoadCommand extends Command{
 
             intakeSubsystem.setSpeed(0);
            beltSubsystem.setSpeed(0);
+
            
            // assemblySubsystem.shootingPosition();
            // flyWheelSubsystem.setSpeed(FlyWheelConstants.FW_MAX_SPEED);

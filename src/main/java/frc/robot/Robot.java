@@ -49,7 +49,7 @@ public class Robot extends LoggedRobot {
 
     // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in
     // the "Understanding Data Flow" page
-    // Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
+    //Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
                     // be added.
 
     m_robotContainer = new RobotContainer();
@@ -64,11 +64,12 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledInit() {
+    //  m_robotContainer.getEndCommand().schedule();
   }
 
   @Override
   public void disabledPeriodic() {
-    //new LockSlide(m_robotContainer.slideSubsystem);
+    
   }
 
   @Override
@@ -107,6 +108,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopExit() {
+    
   }
 
   @Override

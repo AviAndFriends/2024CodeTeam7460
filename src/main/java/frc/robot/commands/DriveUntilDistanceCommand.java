@@ -8,17 +8,16 @@ public class DriveUntilDistanceCommand extends Command {
     private final DriveSubsystem driveSubsystem;
     private final double DISTANCE;
     private boolean done;
-    private final double INITIAL_XPOSITION;
+    private double INITIAL_XPOSITION;
     private final boolean forward;
     private final double SPEED;
 
     public DriveUntilDistanceCommand(DriveSubsystem driveSubsystem, double distance) {
         this.driveSubsystem = driveSubsystem;
         this.DISTANCE = distance;
-        INITIAL_XPOSITION = driveSubsystem.getPose().getX();
-
+        
         forward = true;
-        this.SPEED = 1;
+        this.SPEED = 0.5;
 
         addRequirements(this.driveSubsystem);
     }
@@ -26,10 +25,14 @@ public class DriveUntilDistanceCommand extends Command {
     public DriveUntilDistanceCommand(DriveSubsystem driveSubsystem, double distance, boolean forward, boolean slow) {
         this.driveSubsystem = driveSubsystem;
         this.DISTANCE = distance;
-        INITIAL_XPOSITION = driveSubsystem.getPose().getX();
 
         this.forward = forward;
-        this.SPEED = 0.5;
+        if(slow) {
+            this.SPEED = 0.2;
+        } else {
+            this.SPEED = 0.5;
+        }
+        
 
 
         addRequirements(this.driveSubsystem);
@@ -38,17 +41,19 @@ public class DriveUntilDistanceCommand extends Command {
     @Override
     public void initialize() {
         done = false;
+        INITIAL_XPOSITION = driveSubsystem.getPose().getX();
 
     }
 
     @Override
     public void execute() {
         if (driveSubsystem.getPose().getX() < DISTANCE + INITIAL_XPOSITION && forward) {
-            driveSubsystem.drive(SPEED, 0, 0, false, false);
-        } else if(driveSubsystem.getPose().getX() < DISTANCE + INITIAL_XPOSITION && forward == false) {
-            driveSubsystem.drive(SPEED * -1, 0, 0, false, false);
-        }
-        else {
+            driveSubsystem.drive(SPEED, 0, 0, true, false);
+            System.out.println(driveSubsystem.getPose().getX() + "|" + (INITIAL_XPOSITION + DISTANCE));
+        } else if(driveSubsystem.getPose().getX() > INITIAL_XPOSITION - DISTANCE && !forward) {
+            driveSubsystem.drive(SPEED * -1, 0, 0, true, false);
+            System.out.println(driveSubsystem.getPose().getX() + "|" + (INITIAL_XPOSITION - DISTANCE));
+        } else {
             done = true;
         }
     }

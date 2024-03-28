@@ -33,6 +33,8 @@ public class AlignCommand extends Command {
         // } else {
         // driveSubsystem.drive(0, 0, 0, false, false);
         // }
+
+        
      double yPos;
         if(visionSubsystem.getYPosition(7) != 10000) {
             yPos = visionSubsystem.getYPosition(7);

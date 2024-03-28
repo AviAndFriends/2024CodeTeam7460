@@ -153,13 +153,21 @@ public class Constants {
       public static final class AssemblyConstants {
         public static final int ASSEMBLY_MOTOR_ID = 13;
         //originally at 0.3
-        public static final double ASSEMBLY_MAX_SPEED = 0.2;
-        public static final double ASSEMBLY_SHOOTING_ANGLE = 6.3; //changed from 5.7
-        public static final double ASSEMBLY_NEW_SHOOTING_ANGLE = 2.2;
-        public static final double ASSEMBLY_INTAKE_ANGLE = 0.2;
+        public static final double ASSEMBLY_MAX_SPEED = 0.5;
+          public static final double ASSEMBLY_SHOOTING_ANGLE = 0.411 + 0; //changed from 6.3
+        // public static final double ASSEMBLY_NEW_SHOOTING_ANGLE = 3.5 //changed fom 3
+         // preferred number by driver (caleb said so)
+
+         public static final double ASSEMBLY_NEW_SHOOTING_ANGLE = 0.411 + 0.043; //changed fom 3
+        //  public static final double ASSEMBLY_INTAKE_ANGLE = 0.2;
+
+        public static final double ASSEMBLY_INTAKE_ANGLE = 0.411 + 0.001;
+        // public static final double ASSEMBLY_PASS_ANGLE = 7;
+        public static final double ASSEMBLY_PASS_ANGLE = 0.411 + 0.101;
+
         //Add SmartMotion PID Constants Code from RevRobotics
-        public static final double ASSEMBLY_AMP_SHOOT = 32.9;
-        public static final double ASSEMBLY_AUTONOMOUS1_SHOOTING_ANGLE = 5.9;
+         public static final double ASSEMBLY_AMP_SHOOT = 0.411 + 0; //32.9
+         public static final double ASSEMBLY_AUTONOMOUS1_SHOOTING_ANGLE = 0.411 + 0; //5.9
       }
 //
       public static final class IntakeConstants {
@@ -186,6 +194,8 @@ public class Constants {
       public static final class FlyWheelConstants {
         public static final int FW_MOTOR_ID = 11;
         public static final double FW_MAX_SPEED = -0.7;
+        // public static final double FW_MAX_SPEED = -0;
+
       }
       
     public static int currentMode;

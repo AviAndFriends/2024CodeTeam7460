@@ -20,7 +20,13 @@ public class DownSlideCommand extends Command{
     public void initialize() {}
 
     @Override
+    public boolean runsWhenDisabled() {
+        return true;
+    }
+
+    @Override
     public void execute(){
+        
         slideSubsystem.setSpeed(-SlideConstants.SLIDE_MAX_SPEED);
     }
 

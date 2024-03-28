@@ -34,10 +34,12 @@ import frc.robot.commands.FlyWheelCommand;
 import frc.robot.commands.GroundLoadCommand;
 import frc.robot.commands.IntakeCom3;
 import frc.robot.commands.LockSlide;
+import frc.robot.commands.ReadyToPassCommand;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.AmpReadyCommand;
 import frc.robot.commands.ReadyToShootCommand;
 import frc.robot.commands.RealAutonomousCommand;
+import frc.robot.commands.ResetAssemblyEncoderCommand;
 import frc.robot.commands.ReverseBeltCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SlideCommand;
@@ -79,7 +81,7 @@ public class RobotContainer {
         private final AssemblySubsystem assemblySubsystem = new AssemblySubsystem();
         protected final SlideSubsystem slideSubsystem = new SlideSubsystem();
         private final UltrasonicSubsystem ultrasonicSubsystem = new UltrasonicSubsystem();
-        private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+      private final VisionSubsystem visionSubsystem = new VisionSubsystem();
 
         // The driver's controller
         XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -145,7 +147,7 @@ public class RobotContainer {
                 // assemblySubsystem, flyWheelSubsystem));
 
                 new JoystickButton(supplementalController, XboxController.Button.kY.value)
-                                .onTrue(new AlignCommand(m_robotDrive, visionSubsystem));
+                                .toggleOnTrue(new ReadyToPassCommand(flyWheelSubsystem, assemblySubsystem));
 
                 new JoystickButton(supplementalController, XboxController.Button.kB.value)
                                 .toggleOnTrue(new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem));
@@ -166,8 +168,11 @@ public class RobotContainer {
                 // new JoystickButton(supplementalController, XboxController.Button.kY.value)
                 // .whileTrue(new AssemblyIntakeCommand(assemblySubsystem));
 
-                new POVButton(supplementalController, 0)
-                                .whileTrue(new AssemblyCommand(assemblySubsystem));
+               //  new POVButton(supplementalController, 0)
+               //                  .whileTrue(new ResetAssemblyEncoderCommand(assemblySubsystem));
+
+               new POVButton(supplementalController, 0)
+               .whileTrue(new AlignCommand(m_robotDrive, visionSubsystem));
 
                 new JoystickButton(supplementalController, XboxController.Button.kRightBumper.value)
                                 .whileTrue(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem,
@@ -177,13 +182,13 @@ public class RobotContainer {
                                 .whileTrue(new ReverseBeltCommand(beltSubsystem));
 
                 new JoystickButton(m_driverController, XboxController.Button.kX.value)
-                                .toggleOnTrue(new AmpReadyCommand(slideSubsystem, assemblySubsystem));
+                  .toggleOnTrue(new AmpReadyCommand(slideSubsystem, assemblySubsystem));
 
                new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
-                  .toggleOnTrue(new SlideCommand(slideSubsystem));
+                  .whileTrue(new SlideCommand(slideSubsystem));
 
                new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
-                  .toggleOnTrue(new DownSlideCommand(slideSubsystem));   
+                  .whileTrue(new DownSlideCommand(slideSubsystem));   
 
                 new JoystickButton(buttonBox, 1)
                                 .whileTrue(new AssemblyCommand(assemblySubsystem));
@@ -221,43 +226,46 @@ public class RobotContainer {
                 new JoystickButton(buttonBox, 12)
                                 .toggleOnTrue(new IntakeCom3(intakeSubsystem));
         }
-
-    public Command getAutonomousCommand() {
-        // // Create config for trajectory
-        // TrajectoryConfig config = new TrajectoryConfig(
-        //     AutoConstants.kMaxSpeedMetersPerSecond,
-        //     AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        //     // Add kinematics to ensure max speed is actually obeyed
-        //     .setKinematics(DriveConstants.kDriveKinematics);
+   public Command getEndCommand() {
+      return new DownSlideCommand(slideSubsystem).withTimeout(6);
+   }
    
-        // // An example trajectory to follow. All units in meters.
-        // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(  
-        //         // Start at the origin facing the +X direction
-        // new Pose2d(0, 0, new Rotation2d(0)),
-        // List.of(
-        //   new Translation2d(1, 0),
-        //   new Translation2d(2, 0)
-        // ),
-        //     // End 3 meters straight ahead of where we started, facing forward
-        //     new Pose2d(3, 0, new Rotation2d(0)),
-        //     config);
+   
+   public Command getAutonomousCommand() {
+        // Create config for trajectory
+      //   TrajectoryConfig config = new TrajectoryConfig(
+      //       AutoConstants.kMaxSpeedMetersPerSecond,
+      //       AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+      //       // Add kinematics to ensure max speed is actually obeyed
+      //       .setKinematics(DriveConstants.kDriveKinematics);
+   
+      //   // An example trajectory to follow. All units in meters.
+      //   Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(  
+      //           // Start at the origin facing the +X direction
+      //   new Pose2d(0, 0, new Rotation2d(0)),
+      //   List.of(
+      //     new Translation2d(1, 0)
+      //   ),
+      //       // End 3 meters straight ahead of where we started, facing forward
+      //       new Pose2d(1.5, 0, new Rotation2d(0)),
+      //       config);
         
    
-        // var thetaController = new ProfiledPIDController(
-        //     AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-        // thetaController.enableContinuousInput(-Math.PI, Math.PI);
+      //   var thetaController = new ProfiledPIDController(
+      //       AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+      //   thetaController.enableContinuousInput(-Math.PI, Math.PI);
    
-        // SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        //     exampleTrajectory,
-        //     m_robotDrive::getPose, // Functional interface to feed supplier
-        //     DriveConstants.kDriveKinematics,
+      //   SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+      //       exampleTrajectory,
+      //       m_robotDrive::getPose, // Functional interface to feed supplier
+      //       DriveConstants.kDriveKinematics,
    
-        //     // Position controllers
-        //     new PIDController(AutoConstants.kPXController, 0, 0),
-        //     new PIDController(AutoConstants.kPYController, 0, 0),
-        //     thetaController,
-        //     m_robotDrive::setModuleStates,
-        //     m_robotDrive);
+      //       // Position controllers
+      //       new PIDController(AutoConstants.kPXController, 0, 0),
+      //       new PIDController(AutoConstants.kPYController, 0, 0),
+      //       thetaController,
+      //       m_robotDrive::setModuleStates,
+      //       m_robotDrive);
    
             
 
@@ -280,26 +288,53 @@ public class RobotContainer {
 
             // Run path following command, then stop at the end.
          return new SequentialCommandGroup(
-         //   new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem).withTimeout(4)
+            
+         new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem).withTimeout(1.8)
+           .alongWith(new SequentialCommandGroup(
+                new WaitCommand(1),
+                new BeltCommand(beltSubsystem).withTimeout(0.4)
+           )),
+
+           new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem).withTimeout(5)
+            .alongWith(
+               new SequentialCommandGroup( new DriveUntilDistanceCommand(m_robotDrive, 2.5, true, true))),
+
+
+               new ReverseBeltCommand(beltSubsystem).withTimeout(0.1),
+               
+         new DriveUntilDistanceCommand(m_robotDrive, 2.5, false, true),
+
+         new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem).withTimeout(2.9)
+         .alongWith(new SequentialCommandGroup(
+              new WaitCommand(2),
+              new BeltCommand(beltSubsystem).withTimeout(0.7)
+         ))
+
+
+
+         // //STARTING FROM THE CENTER - 2 PIECE AUTO
+         // new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem).withTimeout(1.8)
          //   .alongWith(new SequentialCommandGroup(
          //        new WaitCommand(1),
-         //        new BeltCommand(beltSubsystem).withTimeout(2)
+         //        new BeltCommand(beltSubsystem).withTimeout(0.4)
          //   )),
-            new WaitCommand(11.5),
-           
-           new DriveUntilDistanceCommand(m_robotDrive, 2)
 
-        //    new DriveUntilDistanceCommand(m_robotDrive, 0.5, true, true)
-        //    .alongWith(new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem).withTimeout(1)),
-           
-        //    new DriveUntilDistanceCommand(m_robotDrive, 2.1, false, false)
-        //    .alongWith(new ),
+         // new GroundLoadCommand(beltSubsystem, intakeSubsystem, assemblySubsystem, flyWheelSubsystem).withTimeout(3)
+         //    .alongWith(
+         //       new SequentialCommandGroup( new DriveUntilDistanceCommand(m_robotDrive, 1.3, true, true))),
 
-        //    new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem).withTimeout(4)
-        //    .alongWith(new SequentialCommandGroup(
-        //         new WaitCommand(1),
-        //         new BeltCommand(beltSubsystem).withTimeout(2)
-        //    ))
+         // new ReverseBeltCommand(beltSubsystem).withTimeout(0.1),
+
+         // new DriveUntilDistanceCommand(m_robotDrive, 1.2, false, true),
+
+         // new ReadyToShootCommand(flyWheelSubsystem, assemblySubsystem).withTimeout(2.9)
+         // .alongWith(new SequentialCommandGroup(
+         //      new WaitCommand(2),
+         //      new BeltCommand(beltSubsystem).withTimeout(0.7)
+         // ))
+
+         
+
            );
 
         // );

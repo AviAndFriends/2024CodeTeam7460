@@ -20,6 +20,7 @@ public class AssemblyIntakeCommand extends Command {
     public void execute(){
     
     assemblySubsystem.intakePosition();
+    }
 
-}
+    
 }

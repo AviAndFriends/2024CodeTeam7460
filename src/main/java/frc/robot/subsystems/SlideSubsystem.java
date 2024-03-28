@@ -64,9 +64,14 @@ public class SlideSubsystem extends SubsystemBase{
     }
 
     public void lowPosition(){
-    
+    // old code
         s_pidController.setReference(SlideConstants.SLIDE_LOW ,CANSparkMax.ControlType.kPosition);
+    // new stuff
+    
+    
     }   
+
+   
 
     public void highPosition(){
         s_pidController.setReference(SlideConstants.SLIDE_HIGH ,CANSparkMax.ControlType.kPosition);

@@ -1,27 +1,38 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AssemblyConstants;
 import frc.robot.Constants.FlyWheelConstants;
 import frc.robot.subsystems.AssemblySubsystem;
 import frc.robot.subsystems.FlyWheelSubsystem;
 
-public class ReadyToShootCommand extends Command {
+public class ReadyToPassCommand extends Command {
 
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
     private final FlyWheelSubsystem flyWheelSubsystem;
     private final AssemblySubsystem assemblySubsystem;
-    // private final int duration;
 
     boolean finished = false;
+    double speed = FlyWheelConstants.FW_MAX_SPEED;
 
-    public ReadyToShootCommand(FlyWheelSubsystem fwsubsystem, AssemblySubsystem asubsystem) {
+    public ReadyToPassCommand(FlyWheelSubsystem fwsubsystem, AssemblySubsystem asubsystem) {
         flyWheelSubsystem = fwsubsystem;
         assemblySubsystem = asubsystem;
         addRequirements(flyWheelSubsystem, assemblySubsystem);
-        // duration = -1;
     }
+
+    public ReadyToPassCommand(FlyWheelSubsystem fwsubsystem, AssemblySubsystem asubsystem, boolean fast) {
+        flyWheelSubsystem = fwsubsystem;
+        assemblySubsystem = asubsystem;
+        if(fast) {
+            speed = -0.9;
+        } else {
+            speed = FlyWheelConstants.FW_MAX_SPEED;
+        }
+        addRequirements(flyWheelSubsystem, assemblySubsystem);
+    }
+
+    
 
 
     @Override
@@ -32,8 +43,8 @@ public class ReadyToShootCommand extends Command {
 
     @Override
     public void execute() {
-        flyWheelSubsystem.setSpeed(FlyWheelConstants.FW_MAX_SPEED);
-        assemblySubsystem.newshootingPosition();
+        flyWheelSubsystem.setSpeed(speed);
+        assemblySubsystem.passPosition();
         
     }
 

@@ -15,6 +15,9 @@ import edu.wpi.first.util.WPIUtilJNI;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.utils.swerveUtils;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort.Port; // put number 
 import edu.wpi.first.wpilibj.SerialPort;
@@ -91,6 +94,11 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
         });
+
+      // double states[] = {m_frontLeft.getState()., m_frontRight.getState(), m_rearLeft.getState(), m_rearRight.getState()};
+      // Logger.recordOutput("Swerve states", states[]);
+
+
   }
 
   /**
