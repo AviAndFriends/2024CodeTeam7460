@@ -1,0 +1,103 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.4457708915417834,
+        "y": 7.083368611181667
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.571698698952954,
+        "y": 7.140377614088561
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.06818502525894,
+        "y": 7.21163886772218
+      },
+      "prevControl": {
+        "x": 2.9256625179917033,
+        "y": 7.069116360454943
+      },
+      "nextControl": {
+        "x": 3.2107075325261767,
+        "y": 7.354161374989417
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.242062484124969,
+        "y": 7.2857505715011435
+      },
+      "prevControl": {
+        "x": 3.2263850083255727,
+        "y": 7.31995597324528
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "ReadyToShoot",
+      "waypointRelativePos": 2.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ReadytoShoot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Belt",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Belt"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -159.56717132060132,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 1.5481576989779766,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

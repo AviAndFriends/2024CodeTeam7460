@@ -11,10 +11,11 @@ public class Constants {
         // Constants for sensors (ie. ultrasonic sensor)
 
         // Ultrasonic constants
-        public static final int LOAD_LENGTH = 10; // # of cycles to be considered loaded
-        public static final double LOAD_DISTANCE = 40; // mm away from sensor to be considered loaded
+        public static final int LOAD_LENGTH = 3; // # of cycles to be considered loaded
+        public static final double LOAD_DISTANCE = 70; // mm away from sensor to be considered loaded
 
         // Vision constants
+        public static final String CAMERA_NAME = "photonvision";
     }
 
     public static final class DriveConstants {
@@ -126,6 +127,7 @@ public class Constants {
         public static final double kDriveDeadband = 0.05;
         public static final double kDeadband = 0;
         public static final int SUPPLEMENTAL_CONTROLLER_PORT = 1;
+        public static final int BUTTON_BOX_PORT = 2;
       }
     
       public static final class AutoConstants {
@@ -134,9 +136,9 @@ public class Constants {
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
-        public static final double kPThetaController = 1;
+        public static final double kPXController = 0.7;
+        public static final double kPYController = 0.7;
+        public static final double kPThetaController = 10;
     
         // Constraint for the motion profiled robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
@@ -150,30 +152,51 @@ public class Constants {
 
       public static final class AssemblyConstants {
         public static final int ASSEMBLY_MOTOR_ID = 13;
-        public static final double ASSEMBLY_MAX_SPEED = 0.3;
-      }
+        //originally at 0.3
+        public static final double ASSEMBLY_MAX_SPEED = 0.5;
+          public static final double ASSEMBLY_SHOOTING_ANGLE = 0.411 + 0; //changed from 6.3
+        // public static final double ASSEMBLY_NEW_SHOOTING_ANGLE = 3.5 //changed fom 3
+         // preferred number by driver (caleb said so)
 
+         public static final double ASSEMBLY_NEW_SHOOTING_ANGLE = 0.411 + 0.043; //changed fom 3
+        //  public static final double ASSEMBLY_INTAKE_ANGLE = 0.2;
+
+        public static final double ASSEMBLY_INTAKE_ANGLE = 0.411 + 0.001;
+        // public static final double ASSEMBLY_PASS_ANGLE = 7;
+        public static final double ASSEMBLY_PASS_ANGLE = 0.411 + 0.101;
+
+        //Add SmartMotion PID Constants Code from RevRobotics
+         public static final double ASSEMBLY_AMP_SHOOT = 0.411 + 0; //32.9
+         public static final double ASSEMBLY_AUTONOMOUS1_SHOOTING_ANGLE = 0.411 + 0; //5.9
+      }
+//
       public static final class IntakeConstants {
         public static final int INTAKE_MOTOR_ID = 9;
-        public static final double INTAKE_MAX_SPEED = 0.7;
+        public static final double INTAKE_MAX_SPEED = -0.3;
       }
 
 
       public static final class SlideConstants {
         public static final int SLIDE_MOTOR_ID = 12;
-        public static final double SLIDE_MAX_SPEED = 0.3;
+        //originally at 0.8
+        public static final double SLIDE_MAX_SPEED = .9;
+        public static final double SLIDE_LOW = 0.1;
+        public static final double SLIDE_HIGH = 5;
+        public static final double SLIDE_AMP_SHOOT = 9.5;  
       }
 
       public static final class BeltConstants {
         public static final int BELT_MOTOR_ID = 10;
+        public static final double BELT_MAX_SPEED = 0.9;
+        public static final double BELT_BACKUP_OFFEST = -0.25;
       }
 
       public static final class FlyWheelConstants {
         public static final int FW_MOTOR_ID = 11;
-      }
+        public static final double FW_MAX_SPEED = -0.7;
+        // public static final double FW_MAX_SPEED = -0;
 
+      }
       
-    
     public static int currentMode;
 }
-
