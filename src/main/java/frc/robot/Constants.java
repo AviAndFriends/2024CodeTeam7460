@@ -22,7 +22,7 @@ public class Constants {
         // the robot, rather the allowed maximum speeds
         public static final double kMaxSpeedMetersPerSecond = 4.8;
         public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
-        public static final double xSpeed = 0; //change max speed
+        public static final double xSpeed = 0.5; //change max speed
         public static final double kDirectionSlewRate = 1.2; // radians per second
         public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
         public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
@@ -89,7 +89,7 @@ public class Constants {
         public static final double kDrivingEncoderPositionFactor =
             (kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction; // meters
         public static final double kDrivingEncoderVelocityFactor =
-            ((kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction) / 60.0; // meters per second
+            ((kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction) / 50.0; // meters per second
     
         public static final double kTurningEncoderPositionFactor = (2 * Math.PI); // radians
         public static final double kTurningEncoderVelocityFactor =
